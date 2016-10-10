@@ -13,7 +13,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.bj58.sfb.nlpcomutils.primitives.StringUtil;
 
 public class HttpClientHelper {
 
@@ -24,7 +23,8 @@ public class HttpClientHelper {
 	public HttpClientHelper() {
 		httpclient = HttpClients.createDefault();
 		requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000)
-				.setRedirectsEnabled(false).setConnectionRequestTimeout(10000).setContentCompressionEnabled(false)
+				.setRedirectsEnabled(false).setConnectionRequestTimeout(10000)
+//				.setContentCompressionEnabled(false)
 				.build();
 	}
 
@@ -55,7 +55,7 @@ public class HttpClientHelper {
 		try {
 			HttpEntity entity = response.getEntity();
 			String returnStr = EntityUtils.toString(entity);
-			if (StringUtil.isEmpty(returnStr) && response.getStatusLine().getStatusCode() >= 400) {
+			if (!isValidStr(returnStr) && response.getStatusLine().getStatusCode() >= 400) {
 				throw new ConnectException(response.getStatusLine().getReasonPhrase() + " Code: "
 						+ response.getStatusLine().getStatusCode());
 
@@ -65,7 +65,9 @@ public class HttpClientHelper {
 			response.close();
 		}
 	}
-
+	private boolean isValidStr (String str){
+		return str!=null && !str.isEmpty();
+	}
 	public static void main(String[] args) {
 		HttpClientHelper op = new HttpClientHelper();
 		String url = "http://m.api.lianjia.com/house/mfangjia/pricemap?city_id=110000&query=&p=1&access_token=&utm_source=&device_id=73484007dc0c59d482d901a6cd221951";
