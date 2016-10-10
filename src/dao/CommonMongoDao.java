@@ -89,6 +89,9 @@ public abstract class CommonMongoDao {
 	}
 
 	public DBObject convert2MongoObject(CommonEntity ce) {
+		if(null == ce){
+			return null;
+		}
 		String newsJson = ce.toJson();		
 		DBObject dbObject = (DBObject) JSON.parse(newsJson);
 		return dbObject;
@@ -101,16 +104,25 @@ public abstract class CommonMongoDao {
 //	}
 	public Object convert2CommonEntity(DBObject dob, Class<?> T)
 	{
+		if(null == dob){
+			return null;
+		}
 		String newsJson = dob.toString();
 		return new Gson().fromJson(newsJson, T);
 	}
 
 	public void insert(CommonEntity ce) {
+		if(null == ce){
+			return;
+		}
 //		System.out.println("Dao insert:"+ce.toJson());
 		coll.insert(convert2MongoObject(ce));
 	}
 	//更新整个对象，注意需要重载的2个接口
 	public void update(CommonEntity ce) {
+		if(null == ce){
+			return;
+		}
 		if(ce.getSelfJsonUpdateCond()){
 			System.out.println(TimeUtil.getCurrentTime()+" "+this.getClass().getSimpleName()+" update "+ce.toJson());
 			coll.update(convert2MongoObject(ce.getJsonUpdateCond()), convert2MongoObject(ce), true, false);
@@ -118,6 +130,9 @@ public abstract class CommonMongoDao {
 	}
 	//更新字段，不存在时添加，注意CommonEntity中需要重载的3个接口
 	public void setField(CommonEntity ce) {
+		if(null == ce){
+			return;
+		}
 		Map<String, Object> fieldMap = ce.getFieldUpate2Mongo();
 		if(ce.getSelfJsonUpdateCond() && !fieldMap.isEmpty()){
 			DBObject updatedValue=new BasicDBObject();
@@ -130,6 +145,9 @@ public abstract class CommonMongoDao {
 	}
 	//更新字段，更新的方式为追加
 	public void appendField(CommonEntity ce) {
+		if(null == ce){
+			return;
+		}
 		Map<String, Object> fieldMap = ce.getFieldAppend2Mongo();
 //		String ceTypeName = ce.getClass().getSimpleName();
 		Class<?> ceType = ce.getClass();
@@ -150,12 +168,23 @@ public abstract class CommonMongoDao {
 	}
 	
 	public DBObject convert2MongoObject(String jStr) {
+		if(null == jStr){
+			return null;
+		}
 		DBObject dbObject = (DBObject) JSON.parse(jStr);
 		return dbObject;
 	}
 	
 	public void insert(String jStr) {
+		if(null == jStr){
+			return;
+		}
 		coll.insert(convert2MongoObject(jStr));
+	}
+	public Object findOne(DBObject bDbOb,  Class<?> T) {
+		
+		DBObject dbb = coll.findOne(bDbOb);
+		return convert2CommonEntity(dbb, T);
 	}
 	public Object findOne(Map<String, Object> queryMap,  Class<?> T) {
 		BasicDBObject bDbOb = new BasicDBObject();
