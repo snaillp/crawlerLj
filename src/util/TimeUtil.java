@@ -90,7 +90,8 @@ public class TimeUtil {
 	public static int getCurMonth()
 	{
 		Calendar cal = Calendar.getInstance();
-		return cal.get(Calendar.MONTH);
+		//Java日历中的月份从0开始
+		return cal.get(Calendar.MONTH)+1;
 	}
 	public static int getCurDay()
 	{
@@ -129,6 +130,22 @@ public class TimeUtil {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(nowTime);
 			calendar.add(Calendar.DAY_OF_MONTH, increment);
+			datetime = df.format(calendar.getTime());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return datetime;
+    }
+    public static String getMonthInc(String dFormat, int increment)
+    {
+    	String datetime = "";
+    	Date nowTime = new Date();
+    	DateFormat df = new SimpleDateFormat(dFormat);
+    	try {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(nowTime);
+			calendar.add(Calendar.MONTH, increment);
 			datetime = df.format(calendar.getTime());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
