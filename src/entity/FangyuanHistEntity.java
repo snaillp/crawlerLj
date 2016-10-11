@@ -11,6 +11,7 @@ public class FangyuanHistEntity extends CommonEntity{
 	private String fangyuanId;
 	private List<PriceEntity> priceList;
 	private List<PriceEntity> unitpriceList;
+	private int isDeal;
 //	private double totalhousearea;
 //	private double inhousearea;
 //	public double getTotalhousearea() {
@@ -27,6 +28,12 @@ public class FangyuanHistEntity extends CommonEntity{
 //	}
 	public String getFangyuanId() {
 		return fangyuanId;
+	}
+	public int getIsDeal() {
+		return isDeal;
+	}
+	public void setIsDeal(int isDeal) {
+		this.isDeal = isDeal;
 	}
 	public void setFangyuanId(String fangyuanId) {
 		this.fangyuanId = fangyuanId;
@@ -96,5 +103,6 @@ public class FangyuanHistEntity extends CommonEntity{
 		}
 		return appendFlag;
 	}
+
 	
 }
