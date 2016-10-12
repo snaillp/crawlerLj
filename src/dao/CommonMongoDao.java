@@ -69,8 +69,8 @@ public abstract class CommonMongoDao {
 		if(null == db || null == coll){
 			System.err.println("mongo connect error");
 		}
-		System.out.println("coll:"+coll.findOne().toString());
-		System.out.println("db:"+db.getName());
+//		System.out.println("coll:"+coll.findOne().toString());
+//		System.out.println("db:"+db.getName());
 	}
 
 	public void destroy() {

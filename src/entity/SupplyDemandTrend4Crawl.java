@@ -6,6 +6,22 @@ import com.google.gson.Gson;
 
 public class SupplyDemandTrend4Crawl {
 
+	public MonthDayTrend getMonth() {
+		return month;
+	}
+
+	public void setMonth(MonthDayTrend month) {
+		this.month = month;
+	}
+
+	public MonthDayTrend getDay() {
+		return day;
+	}
+
+	public void setDay(MonthDayTrend day) {
+		this.day = day;
+	}
+
 	private MonthDayTrend month;
 	private MonthDayTrend day;
 	

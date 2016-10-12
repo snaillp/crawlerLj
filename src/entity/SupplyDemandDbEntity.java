@@ -4,11 +4,29 @@ import java.util.List;
 
 import util.TimeUtil;
 
-public class SupplyDemandMonthDbEntity {
+public class SupplyDemandDbEntity extends CommonEntity{
 	
-	public SupplyDemandMonthDbEntity(SupplyDemandTrend4Crawl.MonthDayTrend mdt){
+	public SupplyDemandDbEntity(SupplyDemandTrend4Crawl.MonthDayTrend mdt, String type){
+		this.type = type;
 		crawltime = TimeUtil.getCurSecond();
 		List<String> timeList = mdt.getDuration();
+		String duration = timeList.get(timeList.size()-1);
+		if(duration.contains("月") && type.equals("month")){
+			String monthStr = duration.replace("月", "");
+			int month = Integer.parseInt(monthStr);
+			int lastMonth = Integer.parseInt(TimeUtil.getMonthInc("M", -1)); //Java日历中的月份从0开始
+			if(month == lastMonth){
+				datetime = TimeUtil.getMonthInc("yyyyMM", -1);
+			}
+		}else if(duration.contains("日") && type.equals("day")){
+			String dayStr = duration.replace("日", "");
+			int day = Integer.parseInt(dayStr);
+			int lastDay = Integer.parseInt(TimeUtil.getDayInc("d", -1)); //Java日历中的月份从0开始
+			System.out.println(lastDay);
+			if(day == lastDay){
+				datetime = TimeUtil.getDayInc("yyyyMMdd", -1);
+			}
+		}
 		//月与日的时间标签不同
 		List<Integer> houseAountList = mdt.getHouseAmount();
 		houseAmount = houseAountList.get(houseAountList.size()-1);
@@ -25,7 +43,7 @@ public class SupplyDemandMonthDbEntity {
 		momCustomer = mdt.getMomCustomer();
 		momRatio = mdt.getMomRatio();
 	}
-	
+	private String type;
 	private long crawltime;
 	private String datetime;  //时间标签
 	private int houseAmount;  //新增房源量

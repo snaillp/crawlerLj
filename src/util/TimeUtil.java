@@ -218,5 +218,6 @@ public class TimeUtil {
 			urlSb.append("http://odds.sports.sina.com.cn/liveodds/match_search.php?date="+TimeUtil.getDayInc("yyyy-MM-dd ", i));
 		}
 		System.out.println(urlSb.toString());
+		System.out.println(getDayInc("d", -5));
     }
 }

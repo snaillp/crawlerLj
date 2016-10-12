@@ -25,10 +25,10 @@ public class MongoAppendfieldPipeLine  implements Pipeline {
 				Iterable value = (Iterable) entry.getValue();
 				for(Object o: value){
 					dao.appendField((CommonEntity)o);
-//					System.out.println(((CommonEntity)o).toJson());
+					System.out.println(((CommonEntity)o).toJson());
 				}
 			}else{
-//				System.out.println("MongoPileline:"+((CommonEntity) entry.getValue()).toJson());
+				System.out.println("MongoPileline:"+((CommonEntity) entry.getValue()).toJson());
 				dao.appendField((CommonEntity) entry.getValue());
 			}
 		}
