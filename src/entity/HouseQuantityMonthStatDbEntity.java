@@ -31,6 +31,7 @@ public class HouseQuantityMonthStatDbEntity extends CommonEntity{
 		List<Integer> totalList = qt.getTotal();
 		totalQuantity = totalList.get(totalList.size()-1);
 	}
+	final HouseDataType dataType = HouseDataType.HouseQuantityMonthStat;
 	private long crawltime;
 	private String monthTime;
 	private int month;

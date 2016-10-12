@@ -8,6 +8,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class FangyuanHistEntity extends CommonEntity{
+	private final HouseDataType dataType = HouseDataType.FangyuanData;
 	private String fangyuanId;
 	private List<PriceEntity> priceList;
 	private List<PriceEntity> unitpriceList;

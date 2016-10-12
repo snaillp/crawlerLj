@@ -9,10 +9,4 @@ public class FangyuanDao extends CommonMongoDao{
 		return sce.getFangyuanTableName();
 	}
 	
-	public static void main(String[] args){
-		
-		
-	}
-	
-	
 }

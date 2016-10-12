@@ -25,7 +25,7 @@ public class HousePriceMonthStatDbEntity extends CommonEntity{
 			monthTime = TimeUtil.getMonthInc("yyyyMM", -1);
 		}
 	}
-	
+	final HouseDataType dataType = HouseDataType.HousePriceMonthStat;
 	private long crawltime;
 	private String monthTime;
 	private int month;

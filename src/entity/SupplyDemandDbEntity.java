@@ -18,14 +18,15 @@ public class SupplyDemandDbEntity extends CommonEntity{
 			if(month == lastMonth){
 				datetime = TimeUtil.getMonthInc("yyyyMM", -1);
 			}
+			dataType = HouseDataType.HouseSupDemMonthStat;
 		}else if(duration.contains("日") && type.equals("day")){
 			String dayStr = duration.replace("日", "");
 			int day = Integer.parseInt(dayStr);
 			int lastDay = Integer.parseInt(TimeUtil.getDayInc("d", -1)); //Java日历中的月份从0开始
-			System.out.println(lastDay);
 			if(day == lastDay){
 				datetime = TimeUtil.getDayInc("yyyyMMdd", -1);
 			}
+			dataType = HouseDataType.HouseSupDemDayStat;
 		}
 		//月与日的时间标签不同
 		List<Integer> houseAountList = mdt.getHouseAmount();
@@ -43,6 +44,7 @@ public class SupplyDemandDbEntity extends CommonEntity{
 		momCustomer = mdt.getMomCustomer();
 		momRatio = mdt.getMomRatio();
 	}
+	private HouseDataType dataType;
 	private String type;
 	private long crawltime;
 	private String datetime;  //时间标签

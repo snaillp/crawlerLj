@@ -83,14 +83,19 @@ public class ServerConfEntity extends CommonConfEntity{
 	public void setFangyuanTableName(String fangyuanTableName) {
 		this.fangyuanTableName = fangyuanTableName;
 	}
-
-
+	public String getHousestatTableName() {
+		return housestatTableName;
+	}
+	public void setHousestatTableName(String housestatTableName) {
+		this.housestatTableName = housestatTableName;
+	}
 
 	private String mongoHost;
 	private int mongoPort;
 	private String mongoDBName;
 //TODO table name
 	private String fangyuanTableName;
+	private String housestatTableName;
 	private String imageDBName;
 	private String imageUrlPrefix;
 	private String redisHost;

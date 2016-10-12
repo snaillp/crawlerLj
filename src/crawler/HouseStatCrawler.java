@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import config.ConfParse;
 import dao.CommonMongoDao;
 import dao.FangyuanDao;
+import dao.HousestatDao;
 import entity.FangyuanHistEntity;
 import entity.HouseEntity;
 import entity.HousePriceMonthStatDbEntity;
@@ -39,7 +40,7 @@ private HttpClientHelper httpclient = new HttpClientHelper();
 	public void crawl()
 	{
 		ServerConfEntity serverConfEntity = (ServerConfEntity)ConfParse.setEntity("./config/server.conf", ServerConfEntity.class);
-		CommonMongoDao dao = new FangyuanDao();
+		CommonMongoDao dao = new HousestatDao();
 		dao.init(serverConfEntity);
 		Pipeline pipeline = new MongoPipeLine(dao);
 		ResultItems resultItems = new ResultItems();
