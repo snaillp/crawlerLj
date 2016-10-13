@@ -31,7 +31,7 @@ import entity.SupplyDemandTrend4Crawl;
 
 public class HouseStatCrawler {
 private HttpClientHelper httpclient = new HttpClientHelper();
-private Logger logger = LogUtil.getLogger("houselog");
+private Logger logger = LogUtil.getLogger("housestatLog");
 	
 	public void crawl()
 	{
@@ -122,7 +122,7 @@ private Logger logger = LogUtil.getLogger("houselog");
 		if(day == 2){
 			return true;
 		}
-		return false;
+		return true;
 	}
 
 	public static void main(String[] args)

@@ -31,7 +31,7 @@ import entity.ServerConfEntity;
 
 public class DataapiCrawler {
 	private HttpClientHelper httpclient = new HttpClientHelper();
-	private Logger logger = LogUtil.getLogger("houselog");
+	private Logger logger = LogUtil.getLogger("fangyuanLog");
 	
 	public void crawl(String url)
 	{
@@ -42,7 +42,7 @@ public class DataapiCrawler {
 //		String url = "http://m.api.lianjia.com/house/ershoufang/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
 		int singleCount = 100;
 		url = url.replace("{count}", String.valueOf(singleCount));
-		logger.info("begin to crawl");
+		logger.info("begin to crawl "+url);
 		try {
 			for(int offset=0; offset<Integer.MAX_VALUE; ++offset){
 				int curOffset = offset*singleCount;
@@ -82,7 +82,7 @@ public class DataapiCrawler {
 		DataapiCrawler dc = new DataapiCrawler();
 		String fangyuanurl = "http://m.api.lianjia.com/house/ershoufang/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
 		dc.crawl(fangyuanurl);
-		String chengjiaoUrl = "http://m.api.lianjia.com/house/chengjiao/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=0";
+		String chengjiaoUrl = "http://m.api.lianjia.com/house/chengjiao/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
 		dc.crawl(chengjiaoUrl);
 	}
 }
