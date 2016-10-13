@@ -3,32 +3,27 @@ package crawler;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import util.HttpClientHelper;
+import util.LogUtil;
 import util.TimeUtil;
-import Pipeline.MongoAppendfieldPipeLine;
 import Pipeline.MongoPipeLine;
 
 import com.google.gson.Gson;
 
 import config.ConfParse;
 import dao.CommonMongoDao;
-import dao.FangyuanDao;
 import dao.HousestatDao;
-import entity.FangyuanHistEntity;
-import entity.HouseEntity;
 import entity.HousePriceMonthStatDbEntity;
 import entity.HouseQuantityMonthStatDbEntity;
 import entity.HouseRequestEntity;
 import entity.HouseStat4CrawlEntity;
 import entity.HouseStatDayDbDataEntity;
 import entity.HouseStatRequestEntity;
-import entity.PriceEntity;
 import entity.PriceTrend4Crawl;
 import entity.ServerConfEntity;
 import entity.SupplyDemandDbEntity;
@@ -36,6 +31,7 @@ import entity.SupplyDemandTrend4Crawl;
 
 public class HouseStatCrawler {
 private HttpClientHelper httpclient = new HttpClientHelper();
+private Logger logger = LogUtil.getLogger("houselog");
 	
 	public void crawl()
 	{
@@ -47,6 +43,9 @@ private HttpClientHelper httpclient = new HttpClientHelper();
 //		resultItems.put("houseinfo", fhe);
 //		pipeline.process(resultItems, null);
 		String url = "http://m.api.lianjia.com/house/mfangjia/search?city_id=110000&quanpin=&community_id=&query=&access_token=&utm_source=&device_id=73484007dc0c59d482d901a6cd221951";
+		String housedataUrl = "http://m.api.lianjia.com/house/ershoufang/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count=2&limit_offset=0";
+		String chengjiaoDataUrl = "http://m.api.lianjia.com/house/chengjiao/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count=2&limit_offset=0";
+		logger.info("begin to crawl");
 		try {
 			String content = httpclient.doGet_String(url);
 			HouseStatRequestEntity hse = new Gson().fromJson(content, HouseStatRequestEntity.class);
@@ -54,7 +53,18 @@ private HttpClientHelper httpclient = new HttpClientHelper();
 			//按天数据
 			HouseStat4CrawlEntity hs4ce = rde.getCard();
 			HouseStatDayDbDataEntity hsdde = new HouseStatDayDbDataEntity(hs4ce);
-			System.out.println(hsdde.toJson());
+			//在售房源数
+			String houseDataConteng = httpclient.doGet_String(housedataUrl);
+			HouseRequestEntity hre = new Gson().fromJson(houseDataConteng, HouseRequestEntity.class);
+			int totalHouseNum = hre.getData().getTotal_count();
+			hsdde.setTotalAmount(totalHouseNum);
+			//成交房源数
+			String dealDataContent = httpclient.doGet_String(chengjiaoDataUrl);
+			hre = new Gson().fromJson(dealDataContent, HouseRequestEntity.class);
+			int dealHouseNum = hre.getData().getTotal_count();
+			hsdde.setTotalDealAmount(dealHouseNum);
+//			System.out.println(hsdde.toJson());
+			logger.info(hsdde.toJson());
 			resultItems.put("daydata", hsdde);
 			//按月数据
 			boolean isFirstCrawl = true;
@@ -65,22 +75,32 @@ private HttpClientHelper httpclient = new HttpClientHelper();
 				System.out.println("curlevel got failed");
 				System.exit(1);
 			}
-			HousePriceMonthStatDbEntity hpmsde = new HousePriceMonthStatDbEntity(curStatInfo);
-			System.out.println(hpmsde.toJson());
-			resultItems.put("monthprice", hpmsde);
+			if(monthNeedCrawl()){
+				HousePriceMonthStatDbEntity hpmsde = new HousePriceMonthStatDbEntity(curStatInfo);
+//				System.out.println(hpmsde.toJson());
+				logger.info(hpmsde.toJson());
+				resultItems.put("monthprice", hpmsde);
+			}
 			//月成交量
-			HouseQuantityMonthStatDbEntity hqmsde = new HouseQuantityMonthStatDbEntity(curStatInfo);
-			System.out.println(hqmsde.toJson());
-			resultItems.put("monthquantity", hpmsde);
+			if(monthNeedCrawl()){
+				HouseQuantityMonthStatDbEntity hqmsde = new HouseQuantityMonthStatDbEntity(curStatInfo);
+//				System.out.println(hqmsde.toJson());
+				logger.info(hqmsde.toJson());
+				resultItems.put("monthquantity", hqmsde);
+			}
 			//供需关系
 			SupplyDemandTrend4Crawl sdt4c = rde.getSupply_demand_trend();
 			//月供需关系
-			SupplyDemandDbEntity monthSdde = new SupplyDemandDbEntity(sdt4c.getMonth(), "month");
-			System.out.println(monthSdde.toJson());
-			resultItems.put("monthSd", monthSdde);
+			if(monthNeedCrawl()){
+				SupplyDemandDbEntity monthSdde = new SupplyDemandDbEntity(sdt4c.getMonth(), "month");
+//				System.out.println(monthSdde.toJson());
+				logger.info(monthSdde.toJson());
+				resultItems.put("monthSd", monthSdde);
+			}
 			//日供需关系
 			SupplyDemandDbEntity daySdde = new SupplyDemandDbEntity(sdt4c.getDay(), "day");
-			System.out.println(daySdde.toJson());
+//			System.out.println(daySdde.toJson());
+			logger.info(daySdde.toJson());
 			resultItems.put("daySd", daySdde);
 			pipeline.process(resultItems, null);
 		} catch (ConnectException e) {
@@ -93,6 +113,7 @@ private HttpClientHelper httpclient = new HttpClientHelper();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		logger.info("crawl done");
 	}
 	
 	public boolean monthNeedCrawl()

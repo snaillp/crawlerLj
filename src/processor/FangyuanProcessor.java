@@ -7,21 +7,13 @@ import java.util.Set;
 
 import config.ConfParse;
 import Pipeline.MongoAppendfieldPipeLine;
-import Pipeline.MongoPipeLine;
-import dao.CommonMongoDao;
 import dao.FangyuanDao;
-import entity.FangyuanEntity;
 import entity.FangyuanHistEntity;
 import entity.PriceEntity;
 import entity.ServerConfEntity;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.processor.PageProcessor;
 import util.TimeUtil;
-import util.UrlUtil;
 
 public class FangyuanProcessor extends ProcessorBaseClass{
 	private String URL_BEGIN = "http://bj.lianjia.com/ershoufang/rs/";

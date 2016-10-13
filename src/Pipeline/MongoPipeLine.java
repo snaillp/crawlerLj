@@ -31,7 +31,7 @@ public class MongoPipeLine implements Pipeline{
 						continue;
 					}
 					nd.insert((CommonEntity)o);
-					System.out.println(((CommonEntity)o).toJson());
+//					System.out.println(((CommonEntity)o).toJson());
 				}
 			}else{
 				if(entry.getValue() instanceof String){

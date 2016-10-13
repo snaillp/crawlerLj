@@ -1,7 +1,5 @@
 package crawler;
 
-import java.util.Map;
-
 import processor.ProcessorBaseInterface;
 import util.TimeUtil;
 import config.ConfParse;

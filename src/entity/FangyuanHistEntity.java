@@ -5,37 +5,81 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.TimeUtil;
+
 import com.google.gson.Gson;
 
 public class FangyuanHistEntity extends CommonEntity{
+	public FangyuanHistEntity(HouseEntity he)
+	{
+		fangyuanId = he.getHouse_code();
+		bedroomnum = he.getBlueprint_bedroom_num();
+		hallnum = he.getBlueprint_hall_num();
+		area = he.getArea();
+		dealstat = he.getKv_house_type();
+		dealDate = he.getSign_date();
+		int price = he.getSign_price();
+		int unitPrice = he.getSign_unit_price();
+		String curDate = TimeUtil.getCurrentDate("yyyyMMdd");
+		PriceEntity priceEntity = new PriceEntity(price, curDate);
+		PriceEntity unitpriceEntity = new PriceEntity(unitPrice, curDate);
+		addPrice(priceEntity);
+		addUnitPrice(unitpriceEntity);
+	}
+	public FangyuanHistEntity()
+	{
+		
+	}
+	
 	private final HouseDataType dataType = HouseDataType.FangyuanData;
 	private String fangyuanId;
+	private int bedroomnum;
+	private int hallnum;
+	private double area;
+	private String dealstat;
+	private String dealDate;
 	private List<PriceEntity> priceList;
 	private List<PriceEntity> unitpriceList;
-	private int isDeal;
-//	private double totalhousearea;
-//	private double inhousearea;
-//	public double getTotalhousearea() {
-//		return totalhousearea;
-//	}
-//	public void setTotalhousearea(double totalhousearea) {
-//		this.totalhousearea = totalhousearea;
-//	}
-//	public double getInhousearea() {
-//		return inhousearea;
-//	}
-//	public void setInhousearea(double inhousearea) {
-//		this.inhousearea = inhousearea;
-//	}
+	
 	public String getFangyuanId() {
 		return fangyuanId;
 	}
-	public int getIsDeal() {
-		return isDeal;
+	public int getBedroomnum() {
+		return bedroomnum;
 	}
-	public void setIsDeal(int isDeal) {
-		this.isDeal = isDeal;
+
+	public void setBedroomnum(int bedroomnum) {
+		this.bedroomnum = bedroomnum;
 	}
+
+	public int getHallnum() {
+		return hallnum;
+	}
+
+	public void setHallnum(int hallnum) {
+		this.hallnum = hallnum;
+	}
+
+	public double getArea() {
+		return area;
+	}
+
+	public void setArea(double area) {
+		this.area = area;
+	}
+
+	public String getDealstat() {
+		return dealstat;
+	}
+
+	public void setDealstat(String dealstat) {
+		this.dealstat = dealstat;
+	}
+
+	public HouseDataType getDataType() {
+		return dataType;
+	}
+
 	public void setFangyuanId(String fangyuanId) {
 		this.fangyuanId = fangyuanId;
 	}

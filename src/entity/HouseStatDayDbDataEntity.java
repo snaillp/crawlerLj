@@ -14,6 +14,8 @@ public class HouseStatDayDbDataEntity extends CommonEntity{
 	private double momQuantity; //成交量增幅
 	private int houseAmount; //新增房源
 	private double momHouse; //新增房源增幅
+	private int totalAmount;  //截止到爬取，总的在售房源数
+	private int totalDealAmount; //截止到爬取，总的成交房源数（成交房源展示会有2周的延迟）
 	
 	public HouseStatDayDbDataEntity(){
 		
@@ -78,6 +80,18 @@ public class HouseStatDayDbDataEntity extends CommonEntity{
 	}
 	public void setMomHouse(double momHouse) {
 		this.momHouse = momHouse;
+	}
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public int getTotalDealAmount() {
+		return totalDealAmount;
+	}
+	public void setTotalDealAmount(int totalDealAmount) {
+		this.totalDealAmount = totalDealAmount;
 	}
 	
 }
