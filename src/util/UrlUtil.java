@@ -1,9 +1,6 @@
 package util;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UrlUtil {
 

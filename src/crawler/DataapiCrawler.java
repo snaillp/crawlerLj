@@ -3,29 +3,26 @@ package crawler;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.pipeline.Pipeline;
 import util.HttpClientHelper;
 import util.TimeUtil;
+import Pipeline.MongoAppendfieldPipeLine;
 
 import com.google.gson.Gson;
 
-import Pipeline.MongoAppendfieldPipeLine;
 import config.ConfParse;
 import dao.CommonMongoDao;
 import dao.FangyuanDao;
-import entity.FangyuanEntity;
 import entity.FangyuanHistEntity;
 import entity.HouseEntity;
 import entity.HouseRequestEntity;
 import entity.PriceEntity;
 import entity.ServerConfEntity;
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.pipeline.Pipeline;
 
 public class DataapiCrawler {
 	private HttpClientHelper httpclient = new HttpClientHelper();

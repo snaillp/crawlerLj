@@ -32,10 +32,10 @@ public class FangyuanProcessor extends ProcessorBaseClass{
 	private String city = "bj";
 	private String ljListurl = "http://{city}.lianjia.com/ershoufang/pg{pageno}/";
 	
-	private double realprice(String numStr, String unitStr)
+	private int realprice(String numStr, String unitStr)
 	{
 		unitStr = unitStr.trim();
-		double num = Double.parseDouble(numStr);
+		int num = Integer.parseInt(numStr);
 		int unit = 1;
 		if(unitStr.equals("亿")){
 			unit = 100000000;
@@ -50,6 +50,7 @@ public class FangyuanProcessor extends ProcessorBaseClass{
 		}
 		return num*unit;
 	}
+	@Override
 	public void process(Page page){
 		String curUrl = page.getRequest().getUrl();
 		System.out.println(TimeUtil.getCurrentTime()+" "+this.getClass().getSimpleName()+":"+curUrl);
@@ -85,13 +86,13 @@ public class FangyuanProcessor extends ProcessorBaseClass{
 			String fangyuanIdStr = page.getHtml().xpath("//div[@class='content']/div[@class='aroundInfo']/div[@class='houseRecord']/span[@class='info']/text()").get();
 			String priceStr = page.getHtml().xpath("//div[@class='content']/div[@class='price']/span[@class='total']/text()").get();
 			String priceUnitStr = page.getHtml().xpath("//div[@class='content']/div[@class='price']/span[@class='unit']/span/text()").get();
-			double price = realprice(priceStr, priceUnitStr);
+			int price = realprice(priceStr, priceUnitStr);
 			String unitPriceStr = page.getHtml().xpath("//div[@class='content']/div[@class='price']/div[@class='text']/div[@class='unitPrice']/span[@class='unitPriceValue']/text()").get();
 			FangyuanHistEntity fangyuanEntity = new FangyuanHistEntity();
 			fangyuanEntity.setFangyuanId(fangyuanIdStr);
 			String curDate = TimeUtil.getCurrentDate("yyyyMMdd");
 			fangyuanEntity.addPrice(new PriceEntity(price, curDate));
-			fangyuanEntity.addUnitPrice(new PriceEntity(Double.parseDouble(unitPriceStr), curDate));
+			fangyuanEntity.addUnitPrice(new PriceEntity(Integer.parseInt(unitPriceStr), curDate));
 //			System.out.println(fangyuanEntity.toJson());
 			page.putField("fangyuan", fangyuanEntity);
 		}
