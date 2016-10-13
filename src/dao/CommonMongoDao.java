@@ -149,8 +149,6 @@ public abstract class CommonMongoDao {
 			return;
 		}
 		String appendCond = ce.getJsonAppendCond();
-		
-//		String ceTypeName = ce.getClass().getSimpleName();
 		Class<?> ceType = ce.getClass();
 		boolean appendFlag = false;
 		if(appendCond != null && !appendCond.isEmpty()){
@@ -158,13 +156,13 @@ public abstract class CommonMongoDao {
 			//找到库里的数据
 			CommonEntity dbObject = (CommonEntity)findOne(appendCondObj, ceType);
 			if(null != dbObject){
-				appendFlag = dbObject.appendList(ce);
+				appendFlag = ce.appendList(dbObject);
+//				appendFlag = dbObject.appendList(ce);
 				if(!appendFlag){
 					return;
 				}
-			}else{
-				dbObject = ce;
 			}
+			dbObject = ce;
 			coll.update(appendCondObj, convert2MongoObject(dbObject), true, false);
 		}
 	}

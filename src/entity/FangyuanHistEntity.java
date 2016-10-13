@@ -121,31 +121,42 @@ public class FangyuanHistEntity extends CommonEntity{
 		//库里字段满足条件
 		return new Gson().toJson(appendCondMap);
 	}
+	
+	private boolean compare(PriceEntity p1, PriceEntity p2)
+	{
+		if(p1.getPrice() != p2.getPrice()){
+			return true;
+		}
+		return false;
+	}
 	@Override
 	public boolean appendList(CommonEntity f)
 	{
 		FangyuanHistEntity ff = (FangyuanHistEntity)f;
 		boolean appendFlag = false;
+		//deal stat
+		String dealStat = this.getDealstat();
+		String f_dealStat = ff.getDealstat();
 		//add price
 		List<PriceEntity> peList = getPriceList();
 		PriceEntity lastPrice = peList.get(peList.size()-1);
 		List<PriceEntity> toAddPeList = ff.getPriceList();
-		for(PriceEntity p: toAddPeList){
-			if(lastPrice.getPrice() != p.getPrice()){
-				peList.add(p);
-				appendFlag = true;
-			}
+		PriceEntity f_lastPrice = toAddPeList.get(toAddPeList.size()-1);
+		if(!lastPrice.equals(f_lastPrice) || !dealStat.equals(f_dealStat)){
+			toAddPeList.add(lastPrice);
+			appendFlag = true;
 		}
+		this.setPriceList(toAddPeList);
 		//add unitprice
 		List<PriceEntity> upeList = getUnitpriceList();
 		PriceEntity lastUprice = upeList.get(upeList.size()-1);
 		List<PriceEntity> toAddUpeList = ff.getUnitpriceList();
-		for(PriceEntity p: toAddUpeList){
-			if(lastUprice.getPrice() != p.getPrice()){
-				upeList.add(p);
-				appendFlag = true;
-			}
+		PriceEntity f_lastUprice = toAddUpeList.get(toAddUpeList.size()-1);
+		if(!lastUprice.equals(f_lastUprice) || !dealStat.equals(f_dealStat)){
+			toAddUpeList.add(lastUprice);
+			appendFlag = true;
 		}
+		this.setUnitpriceList(toAddUpeList);
 		return appendFlag;
 	}
 

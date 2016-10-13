@@ -30,5 +30,16 @@ public class PriceEntity {
 	{
 		
 	}
-	
+	@Override
+	public boolean equals(Object p)
+	{
+		if(!(p instanceof PriceEntity)){
+			return false;
+		}
+		PriceEntity pe = (PriceEntity)p;
+		if(price == pe.getPrice()){
+			return true;
+		}
+		return false;
+	}
 }
