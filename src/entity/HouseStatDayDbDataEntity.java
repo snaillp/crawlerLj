@@ -1,9 +1,13 @@
 package entity;
 
+import java.util.Map;
+
+import com.google.gson.Gson;
+
 import util.TimeUtil;
 
 public class HouseStatDayDbDataEntity extends CommonEntity{
-	final HouseDataType dataType = HouseDataType.HouseDayStat;
+	final HouseDataType dataType = HouseDataType.HouseDistricDayStat;
 	private long crawltime;
 	private String statdate;
 	private double ratio; //昨日新增客房比(新增购房者与售房者的比值（供需比）该指标一定程度反应供需双方对当前市场的评判和对后市的预期）
@@ -93,5 +97,4 @@ public class HouseStatDayDbDataEntity extends CommonEntity{
 	public void setTotalDealAmount(int totalDealAmount) {
 		this.totalDealAmount = totalDealAmount;
 	}
-	
 }

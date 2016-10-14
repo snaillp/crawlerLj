@@ -8,7 +8,9 @@ public class HouseEntity {
 	private double area;
 	private String sign_date;
 	private int sign_price;
+	private int price;
 	private int sign_unit_price;
+	private int unit_price;
 	public String getHouse_code() {
 		return house_code;
 	}
@@ -56,6 +58,18 @@ public class HouseEntity {
 	}
 	public void setSign_date(String sign_date) {
 		this.sign_date = sign_date;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public int getUnit_price() {
+		return unit_price;
+	}
+	public void setUnit_price(int unit_price) {
+		this.unit_price = unit_price;
 	}
 	
 }

@@ -11,4 +11,9 @@ public class LogUtil {
 	{
 		return Logger.getLogger(logname);
 	}
+	public static void main(String[] args)
+	{
+		Logger logger = LogUtil.getLogger("fangyuanLog");
+		logger.info("kkkk");
+	}
 }

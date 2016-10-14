@@ -19,7 +19,13 @@ public class FangyuanHistEntity extends CommonEntity{
 		dealstat = he.getKv_house_type();
 		dealDate = he.getSign_date();
 		int price = he.getSign_price();
+		if(price == 0){
+			price = he.getPrice();
+		}
 		int unitPrice = he.getSign_unit_price();
+		if(unitPrice == 0){
+			he.getUnit_price();
+		}
 		String curDate = TimeUtil.getCurrentDate("yyyyMMdd");
 		PriceEntity priceEntity = new PriceEntity(price, curDate);
 		PriceEntity unitpriceEntity = new PriceEntity(unitPrice, curDate);

@@ -3,6 +3,7 @@ package crawler;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +19,7 @@ import com.google.gson.Gson;
 import config.ConfParse;
 import dao.CommonMongoDao;
 import dao.HousestatDao;
+import entity.DistrictDataDbEntity;
 import entity.HousePriceMonthStatDbEntity;
 import entity.HouseQuantityMonthStatDbEntity;
 import entity.HouseRequestEntity;
@@ -42,9 +44,16 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 		ResultItems resultItems = new ResultItems();
 //		resultItems.put("houseinfo", fhe);
 //		pipeline.process(resultItems, null);
+		//供需关系按天统计
+		String supplyDemandDayUrl = "http://bj.lianjia.com/fangjia/priceTrend/?analysis=1&duration=day";
+		//供需关系按月统计
+		String supplyDemandMonthUrl = "http://bj.lianjia.com/fangjia/priceTrend/?analysis=1";
+		//价格趋势按月统计
+		String priceTrendMonthUrl = "http://bj.lianjia.com/fangjia/priceTrend/";
 		String url = "http://m.api.lianjia.com/house/mfangjia/search?city_id=110000&quanpin=&community_id=&query=&access_token=&utm_source=&device_id=73484007dc0c59d482d901a6cd221951";
 		String housedataUrl = "http://m.api.lianjia.com/house/ershoufang/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count=2&limit_offset=0";
 		String chengjiaoDataUrl = "http://m.api.lianjia.com/house/chengjiao/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count=2&limit_offset=0";
+		String districtDataUrl = "http://bj.lianjia.com/fangjia/priceMap/";
 		logger.info("begin to crawl");
 		try {
 			String content = httpclient.doGet_String(url);
@@ -66,6 +75,11 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 //			System.out.println(hsdde.toJson());
 			logger.info(hsdde.toJson());
 			resultItems.put("daydata", hsdde);
+			//各个区的均价和成交
+			String districtDataContent = httpclient.doGet_String(districtDataUrl);
+			DistrictDataDbEntity ddde = new DistrictDataDbEntity(districtDataContent);
+			logger.info(ddde.toJson());
+			resultItems.put("districtdaydata", hsdde);
 			//按月数据
 			boolean isFirstCrawl = true;
 			//月价格
