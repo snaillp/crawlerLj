@@ -24,7 +24,7 @@ public class FangyuanHistEntity extends CommonEntity{
 		}
 		int unitPrice = he.getSign_unit_price();
 		if(unitPrice == 0){
-			he.getUnit_price();
+			unitPrice = he.getUnit_price();
 		}
 		String curDate = TimeUtil.getCurrentDate("yyyyMMdd");
 		PriceEntity priceEntity = new PriceEntity(price, curDate);
@@ -78,6 +78,12 @@ public class FangyuanHistEntity extends CommonEntity{
 		return dealstat;
 	}
 
+	public String getDealDate() {
+		return dealDate;
+	}
+	public void setDealDate(String dealDate) {
+		this.dealDate = dealDate;
+	}
 	public void setDealstat(String dealstat) {
 		this.dealstat = dealstat;
 	}

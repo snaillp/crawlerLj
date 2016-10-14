@@ -34,6 +34,23 @@ public class TimeUtil {
 		return 0;
 	}
 	
+	public static int compareDate(String format, String date1, String date2)
+	{
+		if(null == date1 || null == date2){
+			return 1;
+		}
+		SimpleDateFormat timeFormater=new SimpleDateFormat(format); 
+		try {
+			Date d1 = timeFormater.parse(date1);
+			Date d2 = timeFormater.parse(date2);
+			return d1.compareTo(d2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 1;
+	}
+	
 	public static String getCurrentDate()
 	{
 		Date nowTime=new Date(); 
