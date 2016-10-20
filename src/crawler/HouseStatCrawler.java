@@ -79,7 +79,7 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 			String districtDataContent = httpclient.doGet_String(districtDataUrl);
 			DistrictDataDbEntity ddde = new DistrictDataDbEntity(districtDataContent);
 			logger.info(ddde.toJson());
-			resultItems.put("districtdaydata", hsdde);
+			resultItems.put("districtdaydata", ddde);
 			//按月数据
 			boolean isFirstCrawl = true;
 			//月价格

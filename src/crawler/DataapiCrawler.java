@@ -51,10 +51,13 @@ public class DataapiCrawler {
 		int singleCount = 100;
 		url = url.replace("{count}", String.valueOf(singleCount));
 		logger.info("begin to crawl "+url);
-		String lastTimestamp = getTimestap("./soldhousetimestamp");
+		String lastTimestamp = null;
 		String curTimestamp = null;
 		String toRecordTimestamp = null;
 		boolean stopFlag = false;
+		if(url.contains("chengjiao")){
+			lastTimestamp = getTimestap("./soldhousetimestamp");
+		}
 		try {
 			for(int offset=0; offset<Integer.MAX_VALUE; ++offset){
 				int curOffset = offset*singleCount;
@@ -72,7 +75,7 @@ public class DataapiCrawler {
 					resultItems.put("houseinfo", fhe);
 					pipeline.process(resultItems, null);
 					curTimestamp = fhe.getDealDate();
-					if(null != curTimestamp){
+					if(lastTimestamp!=null && null != curTimestamp){
 						if(null == toRecordTimestamp || TimeUtil.compareDate("yyyy-MM-dd", toRecordTimestamp, curTimestamp) < 0){
 							toRecordTimestamp = curTimestamp;
 						}
@@ -87,6 +90,9 @@ public class DataapiCrawler {
 					break;
 				}
 			}
+			if(null != toRecordTimestamp){
+				toRecordTimestamp = TimeUtil.addDay("yyyy-MM-dd", toRecordTimestamp, -2);
+			}
 		} catch (ConnectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,7 +103,9 @@ public class DataapiCrawler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setTimestap("./soldhousetimestamp", toRecordTimestamp);
+		if(url.contains("chengjiao")){
+			setTimestap("./soldhousetimestamp", toRecordTimestamp);
+		}
 		logger.info("crawl done");
 	}
 	public String getTimestap(String timestampfile)

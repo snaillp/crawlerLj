@@ -35,7 +35,7 @@ public class DistrictDataDbEntity extends CommonEntity{
 			}
 		}
 	}
-	final HouseDataType dataType = HouseDataType.HouseDayStat;
+	final HouseDataType dataType = HouseDataType.HouseDistricDayStat;
 	private long crawltime;
 	private String statdate;
 	List<DistrictDataEntity> dataList;
