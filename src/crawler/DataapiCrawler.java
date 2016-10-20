@@ -136,10 +136,22 @@ public class DataapiCrawler {
 	}
 	public static void main(String[] args)
 	{
+		String runningType = "all";
+		if(args.length != 1){
+			System.out.println("Usage error");
+			
+		}else{
+			runningType = args[0].toLowerCase();
+		}
+
 		DataapiCrawler dc = new DataapiCrawler();
 		String fangyuanurl = "http://m.api.lianjia.com/house/ershoufang/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
-		dc.crawl(fangyuanurl);
 		String chengjiaoUrl = "http://m.api.lianjia.com/house/chengjiao/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
-		dc.crawl(chengjiaoUrl);
+		if(runningType.equals("all") || runningType.equals("ershoufang")){
+			dc.crawl(fangyuanurl);
+		}
+		if(runningType.equals("all") || runningType.equals("chengjiao")){
+			dc.crawl(chengjiaoUrl);
+		}
 	}
 }
