@@ -163,7 +163,11 @@ public abstract class CommonMongoDao {
 				}
 			}
 			dbObject = ce;
-			System.out.println("update "+dbObject);
+			if(appendFlag){
+				System.out.println("update "+dbObject.toJson());
+			}else{
+				System.out.println("insert "+dbObject.toJson());
+			}
 			coll.update(appendCondObj, convert2MongoObject(dbObject), true, false);
 		}
 	}

@@ -65,7 +65,6 @@ public class DataapiCrawler {
 				logger.info("crawl offset:"+curOffset);
 				String content = httpclient.doGet_String(housedataUrl);
 				HouseRequestEntity hre = new Gson().fromJson(content, HouseRequestEntity.class);
-				System.out.println(hre.getRequest_id());
 				List<HouseEntity> houseList = hre.getData().getList();
 				for(HouseEntity he: houseList){
 					FangyuanHistEntity fhe = new FangyuanHistEntity(he);
