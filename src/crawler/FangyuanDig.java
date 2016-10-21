@@ -50,7 +50,9 @@ public class FangyuanDig {
 					}
 				}
 			}
-			cutMap.put(fangHist, pricediff);
+			if(pricediff != 0){
+				cutMap.put(fangHist, pricediff);
+			}
 		}
 		List<Map.Entry<FangyuanHistEntity, Integer>> cutList = sortMapByValue(cutMap, -1);
 		for(Map.Entry<FangyuanHistEntity, Integer> cutHist: cutList){
