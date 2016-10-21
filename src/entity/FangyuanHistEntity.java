@@ -13,6 +13,10 @@ public class FangyuanHistEntity extends CommonEntity{
 	public FangyuanHistEntity(HouseEntity he)
 	{
 		fangyuanId = he.getHouse_code();
+		title = he.getTitle();
+		bizcircle_name = he.getBizcircle_name();
+		community_name = he.getCommunity_name();
+		floor_state = he.getFloor_state();
 		bedroomnum = he.getBlueprint_bedroom_num();
 		hallnum = he.getBlueprint_hall_num();
 		area = he.getArea();
@@ -39,6 +43,10 @@ public class FangyuanHistEntity extends CommonEntity{
 	
 	private final HouseDataType dataType = HouseDataType.FangyuanData;
 	private String fangyuanId;
+	private String title;
+	private String bizcircle_name; //商圈
+	private String community_name; //小区名
+	private String floor_state;
 	private int bedroomnum;
 	private int hallnum;
 	private double area;

@@ -42,4 +42,14 @@ public class PriceEntity {
 		}
 		return false;
 	}
+	public int compareto(PriceEntity p)
+	{
+		if(price > p.price){
+			return 1;
+		}else if(price == p.price){
+			return 0;
+		}else{
+			return -1;
+		}
+	}
 }

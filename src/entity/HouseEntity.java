@@ -11,6 +11,10 @@ public class HouseEntity {
 	private int price;
 	private int sign_unit_price;
 	private int unit_price;
+	private String title;
+	private String bizcircle_name; //商圈
+	private String community_name; //小区名
+	private String floor_state;
 	public String getHouse_code() {
 		return house_code;
 	}
@@ -70,6 +74,30 @@ public class HouseEntity {
 	}
 	public void setUnit_price(int unit_price) {
 		this.unit_price = unit_price;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getBizcircle_name() {
+		return bizcircle_name;
+	}
+	public void setBizcircle_name(String bizcircle_name) {
+		this.bizcircle_name = bizcircle_name;
+	}
+	public String getCommunity_name() {
+		return community_name;
+	}
+	public void setCommunity_name(String community_name) {
+		this.community_name = community_name;
+	}
+	public String getFloor_state() {
+		return floor_state;
+	}
+	public void setFloor_state(String floor_state) {
+		this.floor_state = floor_state;
 	}
 	
 }

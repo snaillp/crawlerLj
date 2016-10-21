@@ -127,6 +127,7 @@ public class DataapiCrawler {
 		try {
 			Writer writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(timestampfile, false)));
 			writer.write(timestamp);
+			writer.flush();
 			writer.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

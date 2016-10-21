@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,6 +11,7 @@ import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
@@ -203,4 +205,29 @@ public abstract class CommonMongoDao {
 		DBObject dbb = coll.findOne(new BasicDBObject("id", id));
 		return convert2CommonEntity(dbb, T);
 	}	
+	public List<Object> find(Map<String, Object> queryMap,  Class<?> T) {
+		BasicDBObject bDbOb = new BasicDBObject();
+		for(String key: queryMap.keySet()){
+			bDbOb.append(key, queryMap.get(key));
+		}
+		DBCursor dbcur = coll.find(bDbOb);
+		List<Object> objList = new ArrayList();
+		while(dbcur.hasNext()){
+			DBObject dbo = dbcur.next();
+			Object obj = convert2CommonEntity(dbo, T);
+			objList.add(obj);
+		}
+		return objList;
+	}
+	public List<Object> find(String condJson,  Class<?> T) {
+		DBObject bDbOb = convert2MongoObject(condJson);
+		DBCursor dbcur = coll.find(bDbOb);
+		List<Object> objList = new ArrayList();
+		while(dbcur.hasNext()){
+			DBObject dbo = dbcur.next();
+			Object obj = convert2CommonEntity(dbo, T);
+			objList.add(obj);
+		}
+		return objList;
+	}
 }
