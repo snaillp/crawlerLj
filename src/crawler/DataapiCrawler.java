@@ -56,12 +56,12 @@ public class DataapiCrawler {
 		}
 		List<String> cityidList = new ArrayList(10);
 
-		if(runningType.equals("all")){
-			cityidList.add("110000");
-		}else if(runningType.equals("bj")){
+		if(city.equals("all")){
 			cityidList.add("110000");
 			cityidList.add("120000");
-		}else if(runningType.equals("tj")){
+		}else if(city.equals("bj")){
+			cityidList.add("110000");
+		}else if(city.equals("tj")){
 			cityidList.add("120000");
 		}
 		List<String> housestatList = new ArrayList(2);
@@ -73,11 +73,11 @@ public class DataapiCrawler {
 		}else if(runningType.equals("chengjiao")){
 			housestatList.add("chengjiao");
 		}
-		DataapiCrawler dc = new DataapiCrawler();
+		
 		for(String cityid: cityidList){
 			for(String housestat: housestatList){
 				String url = baseurl.replace("{cityid}", cityid).replace("{housestat}", housestat);
-				dc.crawl(url);
+				crawl(url);
 			}
 		}
 	}
@@ -180,6 +180,7 @@ public class DataapiCrawler {
 	}
 	public static void main(String[] args)
 	{
-		
+		DataapiCrawler dc = new DataapiCrawler();
+		dc.run(args);
 	}
 }
