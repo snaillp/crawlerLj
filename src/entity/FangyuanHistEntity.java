@@ -41,6 +41,7 @@ public class FangyuanHistEntity extends CommonEntity{
 		
 	}
 	
+	private String city = "bj";
 	private final HouseDataType dataType = HouseDataType.FangyuanData;
 	private String fangyuanId;
 	private String title;
@@ -55,6 +56,12 @@ public class FangyuanHistEntity extends CommonEntity{
 	private List<PriceEntity> priceList;
 	private List<PriceEntity> unitpriceList;
 	
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
 	public String getFangyuanId() {
 		return fangyuanId;
 	}

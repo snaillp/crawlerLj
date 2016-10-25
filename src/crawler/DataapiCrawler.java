@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,45 @@ import entity.ServerConfEntity;
 public class DataapiCrawler {
 	private HttpClientHelper httpclient = new HttpClientHelper();
 	private Logger logger = LogUtil.getLogger("fangyuanLog");
+	private String baseurl = "http://m.api.lianjia.com/house/{housestat}/search?channel=ershoufang&city_id={cityid}&is_suggestion=0&limit_count={count}&limit_offset=";
 	
+	public void run(String[] args)
+	{
+		String runningType = "all";
+		String city = "all";
+		if(args.length != 2){
+			System.out.println("Usage error");
+		}else{
+			runningType = args[0].toLowerCase();
+			city = args[1].toLowerCase();
+		}
+		List<String> cityidList = new ArrayList(10);
+
+		if(runningType.equals("all")){
+			cityidList.add("110000");
+		}else if(runningType.equals("bj")){
+			cityidList.add("110000");
+			cityidList.add("120000");
+		}else if(runningType.equals("tj")){
+			cityidList.add("120000");
+		}
+		List<String> housestatList = new ArrayList(2);
+		if(runningType.equals("all")){
+			housestatList.add("ershoufang");
+			housestatList.add("chengjiao");
+		}else if(runningType.equals("ershoufang")){
+			housestatList.add("ershoufang");
+		}else if(runningType.equals("chengjiao")){
+			housestatList.add("chengjiao");
+		}
+		DataapiCrawler dc = new DataapiCrawler();
+		for(String cityid: cityidList){
+			for(String housestat: housestatList){
+				String url = baseurl.replace("{cityid}", cityid).replace("{housestat}", housestat);
+				dc.crawl(url);
+			}
+		}
+	}
 	public void crawl(String url)
 	{
 		ServerConfEntity serverConfEntity = (ServerConfEntity)ConfParse.setEntity("./config/server.conf", ServerConfEntity.class);
@@ -68,6 +107,11 @@ public class DataapiCrawler {
 				List<HouseEntity> houseList = hre.getData().getList();
 				for(HouseEntity he: houseList){
 					FangyuanHistEntity fhe = new FangyuanHistEntity(he);
+					if(url.contains("110000")){
+						fhe.setCity("bj");
+					}else if(url.contains("120000")){
+						fhe.setCity("tj");
+					}
 					logger.info(fhe.toJson());
 //					System.out.println(fhe.toJson());
 					ResultItems resultItems = new ResultItems();
@@ -136,22 +180,6 @@ public class DataapiCrawler {
 	}
 	public static void main(String[] args)
 	{
-		String runningType = "all";
-		if(args.length != 1){
-			System.out.println("Usage error");
-			
-		}else{
-			runningType = args[0].toLowerCase();
-		}
-
-		DataapiCrawler dc = new DataapiCrawler();
-		String fangyuanurl = "http://m.api.lianjia.com/house/ershoufang/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
-		String chengjiaoUrl = "http://m.api.lianjia.com/house/chengjiao/search?channel=ershoufang&city_id=110000&is_suggestion=0&limit_count={count}&limit_offset=";
-		if(runningType.equals("all") || runningType.equals("ershoufang")){
-			dc.crawl(fangyuanurl);
-		}
-		if(runningType.equals("all") || runningType.equals("chengjiao")){
-			dc.crawl(chengjiaoUrl);
-		}
+		
 	}
 }
