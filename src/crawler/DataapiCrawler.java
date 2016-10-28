@@ -15,6 +15,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -43,6 +45,10 @@ public class DataapiCrawler {
 	private HttpClientHelper httpclient = new HttpClientHelper();
 	private Logger logger = LogUtil.getLogger("fangyuanLog");
 	private String baseurl = "http://m.api.lianjia.com/house/{housestat}/search?channel=ershoufang&city_id={cityid}&is_suggestion=0&limit_count={count}&limit_offset=";
+	private Map<String, String> cityidmapping = new HashMap() {{
+		put("110000", "bj");
+		put("120000", "tj");
+	}};
 	
 	public void run(String[] args)
 	{
@@ -76,13 +82,15 @@ public class DataapiCrawler {
 		
 		for(String cityid: cityidList){
 			for(String housestat: housestatList){
-				String url = baseurl.replace("{cityid}", cityid).replace("{housestat}", housestat);
-				crawl(url);
+				
+				crawl(cityid, housestat);
 			}
 		}
 	}
-	public void crawl(String url)
+	public void crawl(String cityid, String housestat)
 	{
+		String cityname = cityidmapping.get(cityid);
+		String url = baseurl.replace("{cityid}", cityid).replace("{housestat}", housestat);
 		ServerConfEntity serverConfEntity = (ServerConfEntity)ConfParse.setEntity("./config/server.conf", ServerConfEntity.class);
 		CommonMongoDao dao = new FangyuanDao();
 		dao.init(serverConfEntity);
@@ -90,12 +98,14 @@ public class DataapiCrawler {
 		int singleCount = 100;
 		url = url.replace("{count}", String.valueOf(singleCount));
 		logger.info("begin to crawl "+url);
+		String timestampfile = "./soldhousetimestamp."+cityname;
 		String lastTimestamp = null;
 		String curTimestamp = null;
 		String toRecordTimestamp = null;
 		boolean stopFlag = false;
-		if(url.contains("chengjiao")){
-			lastTimestamp = getTimestap("./soldhousetimestamp");
+		if("chengjiao".equals(housestat)){
+			lastTimestamp = getTimestap(timestampfile);
+			logger.info("get timestamp "+lastTimestamp+" from "+timestampfile);
 		}
 		try {
 			for(int offset=0; offset<Integer.MAX_VALUE; ++offset){
@@ -107,11 +117,7 @@ public class DataapiCrawler {
 				List<HouseEntity> houseList = hre.getData().getList();
 				for(HouseEntity he: houseList){
 					FangyuanHistEntity fhe = new FangyuanHistEntity(he);
-					if(url.contains("110000")){
-						fhe.setCity("bj");
-					}else if(url.contains("120000")){
-						fhe.setCity("tj");
-					}
+					fhe.setCity(cityname);
 					logger.info(fhe.toJson());
 //					System.out.println(fhe.toJson());
 					ResultItems resultItems = new ResultItems();
@@ -146,8 +152,9 @@ public class DataapiCrawler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(url.contains("chengjiao")){
-			setTimestap("./soldhousetimestamp", toRecordTimestamp);
+		if("chengjiao".contains(housestat)){
+			logger.info("write "+toRecordTimestamp+" to "+timestampfile);
+			setTimestap(timestampfile, toRecordTimestamp);
 		}
 		logger.info("crawl done");
 	}

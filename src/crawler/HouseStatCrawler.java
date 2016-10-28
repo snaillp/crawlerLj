@@ -136,7 +136,7 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 		if(day == 2){
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public static void main(String[] args)
