@@ -81,7 +81,6 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 			logger.info(ddde.toJson());
 			resultItems.put("districtdaydata", ddde);
 			//按月数据
-			boolean isFirstCrawl = true;
 			//月价格
 			PriceTrend4Crawl  pt4c = rde.getPrice_trend();
 			entity.PriceTrend4Crawl.CurrentLevel curStatInfo = pt4c.getCurrentLevel();
@@ -133,6 +132,7 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 	public boolean monthNeedCrawl()
 	{
 		int day = TimeUtil.getCurDay();
+//		System.out.println(day);
 		if(day == 2){
 			return true;
 		}
@@ -141,7 +141,8 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 
 	public static void main(String[] args)
 	{
-		HouseStatCrawler dc = new HouseStatCrawler();
-		dc.crawl();
+		HouseStatCrawler hsc = new HouseStatCrawler();
+		hsc.crawl();
+//		System.out.println(dc.monthNeedCrawl());
 	}
 }

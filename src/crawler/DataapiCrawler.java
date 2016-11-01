@@ -136,6 +136,7 @@ public class DataapiCrawler {
 				}
 				int hasMoreData = hre.getData().getHas_more_data();
 				if(hasMoreData != 1 || stopFlag){
+					logger.info("has more data:"+hasMoreData+", or stopflag:"+stopFlag);
 					break;
 				}
 			}

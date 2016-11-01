@@ -31,11 +31,12 @@ public class FangyuanDig {
 		return orderList;
 	}
 	
-	public void findHousePricecut(){
+	public void findHousePricecut(String city){
 		ServerConfEntity serverConfEntity = (ServerConfEntity)ConfParse.setEntity("./config/server.conf", ServerConfEntity.class);
 		CommonMongoDao dao = new FangyuanDao();
 		dao.init(serverConfEntity);
-		List<Object> fangyuanList = dao.find("{'dealstat' : 'sell'}", FangyuanHistEntity.class);
+		String cond = "{'dealstat':'sell', 'city':'{city}'}".replace("{city}", city);
+		List<Object> fangyuanList = dao.find(cond, FangyuanHistEntity.class);
 		Map<FangyuanHistEntity, Integer> cutMap = new HashMap();
 		Map<FangyuanHistEntity, Double> ratiocutMap = new HashMap();
 		Map<FangyuanHistEntity, Integer> unitcutMap = new HashMap();
@@ -116,7 +117,12 @@ public class FangyuanDig {
 	
 	public static void main(String[] args)
 	{
+		if(args.length != 1){
+			System.out.println("city should be given");
+			System.exit(1);
+		}
+		String city = args[0];
 		FangyuanDig fd = new FangyuanDig();
-		fd.findHousePricecut();
+		fd.findHousePricecut(city);
 	}
 }
