@@ -57,6 +57,7 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 		logger.info("begin to crawl");
 		try {
 			String content = httpclient.doGet_String(url);
+			System.out.println(content);
 			HouseStatRequestEntity hse = new Gson().fromJson(content, HouseStatRequestEntity.class);
 			HouseStatRequestEntity.RequestDataEntity rde = hse.getData();
 			//按天数据

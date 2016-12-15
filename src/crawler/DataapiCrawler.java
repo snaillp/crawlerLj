@@ -12,11 +12,14 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -49,9 +52,11 @@ public class DataapiCrawler {
 		put("110000", "bj");
 		put("120000", "tj");
 	}};
+	private Map<String, String> localMap;
 	
 	public void run(String[] args)
 	{
+		getLocal();
 		String runningType = "all";
 		String city = "all";
 		if(args.length != 2){
@@ -87,6 +92,25 @@ public class DataapiCrawler {
 			}
 		}
 	}
+	public void getLocal(){
+		this.localMap = new HashMap();
+		try {
+			BufferedReader br;
+			br = new BufferedReader(new InputStreamReader(new FileInputStream("local.txt"), "utf-8"));
+			String line;
+			while((line = br.readLine()) != null){
+				String[] lineArray = line.trim().split("\\s+");
+				if(lineArray.length != 2){
+					continue;
+				}
+				localMap.put(lineArray[0], lineArray[1]);
+			}
+			br.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void crawl(String cityid, String housestat)
 	{
 		String cityname = cityidmapping.get(cityid);
@@ -103,6 +127,7 @@ public class DataapiCrawler {
 		String curTimestamp = null;
 		String toRecordTimestamp = null;
 		boolean stopFlag = false;
+		Random random = new Random();
 		if("chengjiao".equals(housestat)){
 			lastTimestamp = getTimestap(timestampfile);
 			logger.info("get timestamp "+lastTimestamp+" from "+timestampfile);
@@ -118,6 +143,16 @@ public class DataapiCrawler {
 				for(HouseEntity he: houseList){
 					FangyuanHistEntity fhe = new FangyuanHistEntity(he);
 					fhe.setCity(cityname);
+					if(null == he.getBizcircle_name()){
+						String bizcircle_id = he.getBizcircle_id();
+						if(this.localMap.containsKey(bizcircle_id)){
+							fhe.setBizcircle_name(this.localMap.get(bizcircle_id));
+						}
+					}
+					String district_id = he.getDistrict_id();
+					if(this.localMap.containsKey(district_id)){
+						fhe.setDistrict(this.localMap.get(district_id));
+					}
 					logger.info(fhe.toJson());
 //					System.out.println(fhe.toJson());
 					ResultItems resultItems = new ResultItems();
@@ -139,6 +174,13 @@ public class DataapiCrawler {
 					logger.info("has more data:"+hasMoreData+", or stopflag:"+stopFlag);
 					break;
 				}
+				int sleepno = random.nextInt(10);
+				try {
+					Thread.sleep(sleepno*1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if(null != toRecordTimestamp){
 				toRecordTimestamp = TimeUtil.addDay("yyyy-MM-dd", toRecordTimestamp, -2);
@@ -153,7 +195,7 @@ public class DataapiCrawler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if("chengjiao".contains(housestat)){
+		if("chengjiao".contains(housestat) && toRecordTimestamp!=null){
 			logger.info("write "+toRecordTimestamp+" to "+timestampfile);
 			setTimestap(timestampfile, toRecordTimestamp);
 		}

@@ -15,7 +15,7 @@ public class HouseStatDayDbDataEntity extends CommonEntity{
 	private int showAmount; //昨日房源带看量/次
 	private double momShow; //带看量的增幅
 	private int transAmount; //昨日成交量/套
-	private double momQuantity; //成交量增幅
+	private String momQuantity; //成交量增幅
 	private int houseAmount; //新增房源
 	private double momHouse; //新增房源增幅
 	private int totalAmount;  //截止到爬取，总的在售房源数
@@ -67,10 +67,10 @@ public class HouseStatDayDbDataEntity extends CommonEntity{
 	public void setTransAmount(int transAmount) {
 		this.transAmount = transAmount;
 	}
-	public double getMomQuantity() {
+	public String getMomQuantity() {
 		return momQuantity;
 	}
-	public void setMomQuantity(double momQuantity) {
+	public void setMomQuantity(String momQuantity) {
 		this.momQuantity = momQuantity;
 	}
 	public int getHouseAmount() {

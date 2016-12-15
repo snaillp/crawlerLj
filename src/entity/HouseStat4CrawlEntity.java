@@ -2,7 +2,7 @@ package entity;
 
 public class HouseStat4CrawlEntity {
 	private String month;  //月份（上一月）
-	private int monthTrans; //月参考价（成交均价？）
+	private String monthTrans; //月参考价（成交均价？）
 	private int tradeCount; //月成交量  ?
 	private String dealMonthRatio; // ?
 	private double ratio; //昨日新增客房比(新增购房者与售房者的比值（供需比）该指标一定程度反应供需双方对当前市场的评判和对后市的预期）
@@ -10,7 +10,7 @@ public class HouseStat4CrawlEntity {
 	private int showAmount; //昨日房源带看量/次
 	private double momShow; //带看量的增幅
 	private int transAmount; //昨日成交量/套
-	private double momQuantity; //成交量增幅
+	private String momQuantity; //成交量增幅
 	private int houseAmount; //新增房源
 	private double momHouse; //新增房源增幅
 	public String getMonth() {
@@ -19,10 +19,10 @@ public class HouseStat4CrawlEntity {
 	public void setMonth(String month) {
 		this.month = month;
 	}
-	public int getMonthTrans() {
+	public String getMonthTrans() {
 		return monthTrans;
 	}
-	public void setMonthTrans(int monthTrans) {
+	public void setMonthTrans(String monthTrans) {
 		this.monthTrans = monthTrans;
 	}
 	public int getTradeCount() {
@@ -67,10 +67,10 @@ public class HouseStat4CrawlEntity {
 	public void setTransAmount(int transAmount) {
 		this.transAmount = transAmount;
 	}
-	public double getMomQuantity() {
+	public String getMomQuantity() {
 		return momQuantity;
 	}
-	public void setMomQuantity(double momQuantity) {
+	public void setMomQuantity(String momQuantity) {
 		this.momQuantity = momQuantity;
 	}
 	public int getHouseAmount() {

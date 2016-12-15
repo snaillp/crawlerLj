@@ -14,14 +14,20 @@ public class FangyuanHistEntity extends CommonEntity{
 	{
 		fangyuanId = he.getHouse_code();
 		title = he.getTitle();
+		bizcircle_id = he.getBizcircle_id();
 		bizcircle_name = he.getBizcircle_name();
 		community_name = he.getCommunity_name();
 		floor_state = he.getFloor_state();
 		bedroomnum = he.getBlueprint_bedroom_num();
 		hallnum = he.getBlueprint_hall_num();
 		area = he.getArea();
+		orientation = he.getOrientation();
+		decoration = he.getDecoration();
+		building_type = he.getBuilding_type();
 		dealstat = he.getKv_house_type();
 		dealDate = he.getSign_date();
+		this.school_info = he.getSchool_info();
+		this.subway_info = he.getSubway_info();
 		int price = he.getSign_price();
 		if(price == 0){
 			price = he.getPrice();
@@ -45,16 +51,23 @@ public class FangyuanHistEntity extends CommonEntity{
 	private final HouseDataType dataType = HouseDataType.FangyuanData;
 	private String fangyuanId;
 	private String title;
+	private String district;
+	private String bizcircle_id;
 	private String bizcircle_name; //商圈
 	private String community_name; //小区名
 	private String floor_state;
 	private int bedroomnum;
 	private int hallnum;
 	private double area;
+	private String orientation; //朝向
+	private String decoration; //装修
+	private String building_type; //板楼or塔楼
 	private String dealstat;
 	private String dealDate;
 	private List<PriceEntity> priceList;
 	private List<PriceEntity> unitpriceList;
+	private List<SchoolInfo> school_info;
+	private List<SubwayInfo> subway_info;
 	
 	public String getCity() {
 		return city;
@@ -103,10 +116,64 @@ public class FangyuanHistEntity extends CommonEntity{
 		this.dealstat = dealstat;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDistrict() {
+		return district;
+	}
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+	public String getBizcircle_name() {
+		return bizcircle_name;
+	}
+	public void setBizcircle_name(String bizcircle_name) {
+		this.bizcircle_name = bizcircle_name;
+	}
+	public String getCommunity_name() {
+		return community_name;
+	}
+	public void setCommunity_name(String community_name) {
+		this.community_name = community_name;
+	}
+	public String getFloor_state() {
+		return floor_state;
+	}
+	public void setFloor_state(String floor_state) {
+		this.floor_state = floor_state;
+	}
 	public HouseDataType getDataType() {
 		return dataType;
 	}
 
+	public String getBizcircle_id() {
+		return bizcircle_id;
+	}
+	public void setBizcircle_id(String bizcircle_id) {
+		this.bizcircle_id = bizcircle_id;
+	}
+	public String getOrientation() {
+		return orientation;
+	}
+	public void setOrientation(String orientation) {
+		this.orientation = orientation;
+	}
+	public String getDecoration() {
+		return decoration;
+	}
+	public void setDecoration(String decoration) {
+		this.decoration = decoration;
+	}
+	public String getBuilding_type() {
+		return building_type;
+	}
+	public void setBuilding_type(String building_type) {
+		this.building_type = building_type;
+	}
 	public void setFangyuanId(String fangyuanId) {
 		this.fangyuanId = fangyuanId;
 	}
