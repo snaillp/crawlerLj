@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-public class BizStat {
+public class BizStat implements Comparable<BizStat>{
 	private String district;
 	private String bizname;
 	private String xiaoqu;
@@ -69,5 +69,45 @@ public class BizStat {
 		String retStr = new Gson().toJson(this);
 		this.houseUnitpriceList = hList;
 		return retStr;
+	}
+	@Override
+	public int compareTo(BizStat arg0) {
+		//优先级：区->商圈->均价->房源数->小区名
+		int ret = 0;
+		if(district != null){
+			ret = this.district.compareTo(arg0.district);
+		}
+		if(ret != 0){
+			return ret;
+		}
+		if(this.bizname != null){
+			ret = this.bizname.compareTo(arg0.bizname);
+		}
+		if(ret != 0){
+			return ret;
+		}
+		if(this.average>arg0.average){
+			ret = 1;
+		}else if(this.average < arg0.average){
+			ret = -1;
+		}
+		if(ret != 0){
+			return ret;
+		}
+		if(this.housenum > arg0.housenum){
+			ret = 1;
+		}else if(this.housenum < arg0.housenum){
+			ret = -1;
+		}
+		if(ret != 0){
+			return ret;
+		}
+		if(this.xiaoqu != null){
+			ret = this.xiaoqu.compareTo(arg0.xiaoqu);
+		}
+		if(ret != 0){
+			return ret;
+		}
+		return ret;
 	}
 }
