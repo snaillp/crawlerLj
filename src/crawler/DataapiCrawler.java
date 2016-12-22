@@ -174,16 +174,16 @@ public class DataapiCrawler {
 					logger.info("has more data:"+hasMoreData+", or stopflag:"+stopFlag);
 					break;
 				}
-				int sleepno = random.nextInt(10);
+				int sleepno = random.nextInt(100);
 				try {
-					Thread.sleep(sleepno*1000);
+					Thread.sleep(sleepno);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			if(null != toRecordTimestamp){
-				toRecordTimestamp = TimeUtil.addDay("yyyy-MM-dd", toRecordTimestamp, -2);
+				toRecordTimestamp = TimeUtil.addDay("yyyy-MM-dd", toRecordTimestamp, -5);
 			}
 		} catch (ConnectException e) {
 			// TODO Auto-generated catch block

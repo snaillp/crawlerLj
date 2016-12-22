@@ -1,4 +1,4 @@
-package crawler;
+package stat;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import entity.FangyuanHistEntity;
 import entity.PriceEntity;
 import entity.ServerConfEntity;
 
-public class FangyuanDig {
+public class FangyuanCut {
 	
 	private static <K, V> List<Map.Entry<K, V>> sortMapByValue(Map<K, V> map,
 			final int sort) {
@@ -122,7 +122,7 @@ public class FangyuanDig {
 			System.exit(1);
 		}
 		String city = args[0];
-		FangyuanDig fd = new FangyuanDig();
+		FangyuanCut fd = new FangyuanCut();
 		fd.findHousePricecut(city);
 	}
 }
