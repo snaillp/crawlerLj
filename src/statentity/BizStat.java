@@ -74,14 +74,22 @@ public class BizStat implements Comparable<BizStat>{
 	public int compareTo(BizStat arg0) {
 		//优先级：区->商圈->均价->房源数->小区名
 		int ret = 0;
-		if(district != null){
+		if(this.district != null && arg0.district != null){
 			ret = this.district.compareTo(arg0.district);
+		}else if(this.district == null){
+			ret = -1;
+		}else if(arg0.district == null){
+			return 1;
 		}
 		if(ret != 0){
 			return ret;
 		}
-		if(this.bizname != null){
+		if(this.bizname != null && arg0.bizname != null){
 			ret = this.bizname.compareTo(arg0.bizname);
+		}else if(this.bizname == null){
+			return -1;
+		}else if(arg0.bizname == null){
+			return 1;
 		}
 		if(ret != 0){
 			return ret;
@@ -102,12 +110,19 @@ public class BizStat implements Comparable<BizStat>{
 		if(ret != 0){
 			return ret;
 		}
-		if(this.xiaoqu != null){
+		if(this.xiaoqu != null && arg0.xiaoqu != null){
 			ret = this.xiaoqu.compareTo(arg0.xiaoqu);
+		}else if(this.xiaoqu == null){
+			ret = -1;
+		}else if(arg0.xiaoqu == null){
+			ret = 1;
 		}
 		if(ret != 0){
 			return ret;
 		}
 		return ret;
+	}
+	public static void main(String[] args){
+		"aa".compareTo("a");
 	}
 }

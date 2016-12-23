@@ -25,6 +25,12 @@ public class FangyuanHistEntity extends CommonEntity{
 		decoration = he.getDecoration();
 		building_type = he.getBuilding_type();
 		dealstat = he.getKv_house_type();
+		if(dealstat.equals("sold")){
+			String[] titleArray = title.split("\\s+");
+			if(titleArray.length > 0){
+				community_name = titleArray[0];
+			}
+		}
 		dealDate = he.getSign_date();
 		this.school_info = he.getSchool_info();
 		this.subway_info = he.getSubway_info();

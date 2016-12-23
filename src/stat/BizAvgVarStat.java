@@ -50,6 +50,9 @@ public class BizAvgVarStat {
 				bizStatMap.put(mapkey, bstat);
 			}
 		}
+		if(bizStatMap.isEmpty()){
+			return;
+		}
 		List<Map.Entry<String, BizStat>> bizList = sortMapByValue(bizStatMap, 1);
 		for(Map.Entry<String, BizStat> bizEntity: bizList){
 			BizStat bstat = bizEntity.getValue();
@@ -75,6 +78,7 @@ public class BizAvgVarStat {
 			final int sort) {
 		List<Map.Entry<K, V>> orderList = new ArrayList<Map.Entry<K, V>>(
 				map.entrySet());
+		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 		Collections.sort(orderList, new Comparator<Map.Entry<K, V>>() {
 			// @Override
 			@SuppressWarnings("unchecked")
@@ -90,12 +94,14 @@ public class BizAvgVarStat {
 		//level=1(商圈)|0(小区), sellstat=sell|sold
 		BizAvgVarStat bavs = new BizAvgVarStat();
 		//商圈统计, 
-		System.out.println("商圈统计：");
+		System.out.println("商圈统计：sell");
 		bavs.comAvgVar("bj", 1, "sell");
-		bavs.comAvgVar("bj", 1, "sold");
+//		System.out.println("商圈统计：sold");
+//		bavs.comAvgVar("bj", 1, "sold");
 		//小区统计
-		System.out.println("小区统计：");
+		System.out.println("小区统计：sell");
 		bavs.comAvgVar("bj", 0, "sell");
-		bavs.comAvgVar("bj", 0, "sold");
+//		System.out.println("小区统计：sold");
+//		bavs.comAvgVar("bj", 0, "sold");
 	}
 }
