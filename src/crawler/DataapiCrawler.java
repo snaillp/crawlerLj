@@ -133,6 +133,7 @@ public class DataapiCrawler {
 			logger.info("get timestamp "+lastTimestamp+" from "+timestampfile);
 		}
 		try {
+			int totalHouseNum = 0;
 			for(int offset=0; offset<Integer.MAX_VALUE; ++offset){
 				int curOffset = offset*singleCount;
 				String housedataUrl = url+curOffset;
@@ -140,6 +141,7 @@ public class DataapiCrawler {
 				String content = httpclient.doGet_String(housedataUrl);
 				HouseRequestEntity hre = new Gson().fromJson(content, HouseRequestEntity.class);
 				List<HouseEntity> houseList = hre.getData().getList();
+				totalHouseNum += houseList.size();
 				for(HouseEntity he: houseList){
 					FangyuanHistEntity fhe = new FangyuanHistEntity(he);
 					fhe.setCity(cityname);
@@ -171,7 +173,7 @@ public class DataapiCrawler {
 				}
 				int hasMoreData = hre.getData().getHas_more_data();
 				if(hasMoreData != 1 || stopFlag){
-					logger.info("has more data:"+hasMoreData+", or stopflag:"+stopFlag);
+					logger.info("has more data:"+hasMoreData+", or stopflag:"+stopFlag+", total update size:"+totalHouseNum);
 					break;
 				}
 				int sleepno = random.nextInt(100);

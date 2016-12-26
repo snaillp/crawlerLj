@@ -26,6 +26,10 @@ public class BizAvgVarStat {
 		Map<String, BizStat> bizStatMap = new HashMap();
 		for(Object fangyuanOb: fangyuanList){
 			FangyuanHistEntity fangHist = (FangyuanHistEntity)fangyuanOb;
+			String district = fangHist.getDistrict();
+			if(null == district){
+				continue;
+			}
 			String mapkey = null;
 			if(level == 0){
 				mapkey = fangHist.getCommunity_name(); //小区名
@@ -37,7 +41,7 @@ public class BizAvgVarStat {
 				bizStatMap.get(mapkey).addHouseUnitprice(houseUnitprice.get(houseUnitprice.size()-1).getPrice());
 			}else{
 				String bizname = fangHist.getBizcircle_name();
-				String district = fangHist.getDistrict();
+//				String district = fangHist.getDistrict();
 				BizStat bstat = new BizStat();
 				bstat.setBizname(bizname);
 				bstat.setDistrict(district);
@@ -78,7 +82,7 @@ public class BizAvgVarStat {
 			final int sort) {
 		List<Map.Entry<K, V>> orderList = new ArrayList<Map.Entry<K, V>>(
 				map.entrySet());
-		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+//		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 		Collections.sort(orderList, new Comparator<Map.Entry<K, V>>() {
 			// @Override
 			@SuppressWarnings("unchecked")
