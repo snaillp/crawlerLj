@@ -7,8 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Pipeline.MongoAppendfieldPipeLine;
 import statentity.BizStat;
+import statentity.BizStatData;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.pipeline.Pipeline;
+import util.TimeUtil;
 import config.ConfParse;
+import dao.BizAvgStatDao;
 import dao.CommonMongoDao;
 import dao.FangyuanDao;
 import entity.FangyuanHistEntity;
@@ -19,10 +25,13 @@ public class BizAvgVarStat {
 //按商圈统计均价和方差
 	public void comAvgVar(String city, int level, String sellstat){
 		ServerConfEntity serverConfEntity = (ServerConfEntity)ConfParse.setEntity("./config/server.conf", ServerConfEntity.class);
-		CommonMongoDao dao = new FangyuanDao();
-		dao.init(serverConfEntity);
+		CommonMongoDao bizDao = new BizAvgStatDao();
+		bizDao.init(serverConfEntity);
+		Pipeline pipeline = new MongoAppendfieldPipeLine(bizDao);
+		CommonMongoDao fangyuandao = new FangyuanDao();
+		fangyuandao.init(serverConfEntity);
 		String cond = "{'dealstat':'{sellstat}', 'city':'{city}'}".replace("{city}", city).replace("{sellstat}", sellstat);
-		List<Object> fangyuanList = dao.find(cond, FangyuanHistEntity.class);
+		List<Object> fangyuanList = fangyuandao.find(cond, FangyuanHistEntity.class);
 		Map<String, BizStat> bizStatMap = new HashMap();
 		for(Object fangyuanOb: fangyuanList){
 			FangyuanHistEntity fangHist = (FangyuanHistEntity)fangyuanOb;
@@ -43,12 +52,31 @@ public class BizAvgVarStat {
 				String bizname = fangHist.getBizcircle_name();
 //				String district = fangHist.getDistrict();
 				BizStat bstat = new BizStat();
-				bstat.setBizname(bizname);
+				bstat.setCity(city);
+				bstat.setSellstat(sellstat);
+				
+				String bizId = fangHist.getBizcircle_id();
+				if(bizId != null){
+					bstat.setBizId(bizId);
+				}
+				if(bizname != null){
+					bstat.setBizname(bizname);
+				}
+				String districtId = fangHist.getDistrict_id();
+				if(districtId != null){
+					bstat.setDistrictId(districtId);
+				}
 				bstat.setDistrict(district);
 				if(level == 0){
 					//小区
+					String xiaoquId = fangHist.getCommunity_id();
+					if(xiaoquId != null){
+						bstat.setXiaoquId(xiaoquId);
+					}
 					String xiaoqu = fangHist.getCommunity_name();
-					bstat.setXiaoqu(xiaoqu);
+					if(xiaoqu != null){
+						bstat.setXiaoqu(xiaoqu);
+					}
 				}
 				bstat.addHouseUnitprice(houseUnitprice.get(houseUnitprice.size()-1).getPrice());
 				bizStatMap.put(mapkey, bstat);
@@ -57,8 +85,7 @@ public class BizAvgVarStat {
 		if(bizStatMap.isEmpty()){
 			return;
 		}
-		List<Map.Entry<String, BizStat>> bizList = sortMapByValue(bizStatMap, 1);
-		for(Map.Entry<String, BizStat> bizEntity: bizList){
+		for(Map.Entry<String, BizStat> bizEntity: bizStatMap.entrySet()){
 			BizStat bstat = bizEntity.getValue();
 			List<Integer> unitpriceList = bstat.getHouseUnitpriceList();
 			double avg = 0.0;
@@ -72,10 +99,23 @@ public class BizAvgVarStat {
 				var += diff*diff;
 			}
 			var /= unitpriceList.size();
-			bstat.setAverage(avg);
-			bstat.setVariance(var);
-			bstat.setHousenum(unitpriceList.size());
-			System.out.println(bstat.toJson());
+			BizStatData bsd = new BizStatData();
+			String date = TimeUtil.getCurrentDate();
+			bsd.setDate(date);
+			long comtime = TimeUtil.getCurSecond();
+			bsd.setComtime(comtime);
+			bsd.setAverage(avg);
+			bsd.setVariance(var);
+			bsd.setHousenum(unitpriceList.size());
+			bstat.addDataList(bsd);
+//			System.out.println(bstat.toJson());
+			ResultItems resultItems = new ResultItems();
+			resultItems.put("bizstatinfo", bstat);
+			pipeline.process(resultItems, null);
+		}
+		List<Map.Entry<String, BizStat>> bizList = sortMapByValue(bizStatMap, 1);
+		for(Map.Entry<String, BizStat> bizEntity: bizList){
+			System.out.println(bizEntity.getValue().toJson());
 		}
 	}
 	private static <K, V> List<Map.Entry<K, V>> sortMapByValue(Map<K, V> map,
@@ -98,8 +138,8 @@ public class BizAvgVarStat {
 		//level=1(商圈)|0(小区), sellstat=sell|sold
 		BizAvgVarStat bavs = new BizAvgVarStat();
 		//商圈统计, 
-		System.out.println("商圈统计：sell");
-		bavs.comAvgVar("bj", 1, "sell");
+//		System.out.println("商圈统计：sell");
+//		bavs.comAvgVar("bj", 1, "sell");
 //		System.out.println("商圈统计：sold");
 //		bavs.comAvgVar("bj", 1, "sold");
 		//小区统计

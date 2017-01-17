@@ -26,16 +26,17 @@ public class HouseStatDayDbDataEntity extends CommonEntity{
 	}
 	public HouseStatDayDbDataEntity(HouseStat4CrawlEntity hsce)
 	{
+		//从2017年1月份mom系列的数据没了
 		crawltime = TimeUtil.getCurSecond();
 		statdate = TimeUtil.getDayInc("yyyyMMdd", -1);
 		this.ratio = hsce.getRatio();
-		momRatio = hsce.getMomRatio();
+//		momRatio = hsce.getMomRatio();
 		showAmount = hsce.getShowAmount();
-		momShow = hsce.getMomShow();
+//		momShow = hsce.getMomShow();
 		transAmount = hsce.getTransAmount();
-		momQuantity = hsce.getMomQuantity();
+//		momQuantity = hsce.getMomQuantity();
 		houseAmount = hsce.getHouseAmount();
-		momHouse = hsce.getMomHouse();
+//		momHouse = hsce.getMomHouse();
 	}
 	public double getRatio() {
 		return ratio;

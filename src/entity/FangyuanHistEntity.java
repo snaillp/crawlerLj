@@ -14,8 +14,10 @@ public class FangyuanHistEntity extends CommonEntity{
 	{
 		fangyuanId = he.getHouse_code();
 		title = he.getTitle();
+		district_id = he.getDistrict_id();
 		bizcircle_id = he.getBizcircle_id();
 		bizcircle_name = he.getBizcircle_name();
+		community_id = he.getCommunity_id();
 		community_name = he.getCommunity_name();
 		floor_state = he.getFloor_state();
 		bedroomnum = he.getBlueprint_bedroom_num();
@@ -57,9 +59,11 @@ public class FangyuanHistEntity extends CommonEntity{
 	private final HouseDataType dataType = HouseDataType.FangyuanData;
 	private String fangyuanId;
 	private String title;
+	private String district_id;
 	private String district;
 	private String bizcircle_id;
 	private String bizcircle_name; //商圈
+	private String community_id;
 	private String community_name; //小区名
 	private String floor_state;
 	private int bedroomnum;
@@ -145,6 +149,18 @@ public class FangyuanHistEntity extends CommonEntity{
 	}
 	public void setCommunity_name(String community_name) {
 		this.community_name = community_name;
+	}
+	public String getDistrict_id() {
+		return district_id;
+	}
+	public void setDistrict_id(String district_id) {
+		this.district_id = district_id;
+	}
+	public String getCommunity_id() {
+		return community_id;
+	}
+	public void setCommunity_id(String community_id) {
+		this.community_id = community_id;
 	}
 	public String getFloor_state() {
 		return floor_state;

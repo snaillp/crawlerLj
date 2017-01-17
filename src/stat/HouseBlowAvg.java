@@ -19,46 +19,66 @@ import entity.ServerConfEntity;
 import statentity.BizStat;
 
 public class HouseBlowAvg {
-	private Map<String, BizStat> readAvg(String avgfile){
-		Map<String, BizStat> avgMap = new HashMap();
+	private List<BizStat> readAvg(String avgfile){
+		List<BizStat> avgList = new ArrayList();
 		try {
 			BufferedReader br;
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(avgfile), "utf-8"));
 			String line;
 			Gson parser = new Gson();
+			boolean beginFlag = false;
 			while ((line = br.readLine()) != null) {
+				if(line.startsWith("小区统计")){
+					beginFlag = true;
+					continue;
+				}
+				if(!beginFlag){
+					continue;
+				}
 				line = line.trim();
 				BizStat xiaoquAvg = parser.fromJson(line, BizStat.class);
-				avgMap.put(xiaoquAvg.getXiaoqu(), xiaoquAvg);
+				avgList.add(xiaoquAvg);
 			}
 			br.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return avgMap;
+		return avgList;
 	}
 	public void findHouseBlowAvg(String avgfile, String city, String sellstat)
 	{
-		Map<String, BizStat> avgMap = readAvg(avgfile);
+		List<BizStat> avgList = readAvg(avgfile);
 		ServerConfEntity serverConfEntity = (ServerConfEntity)ConfParse.setEntity("./config/server.conf", ServerConfEntity.class);
 		CommonMongoDao dao = new FangyuanDao();
 		dao.init(serverConfEntity);
-		for(Map.Entry<String, BizStat> bizStat: avgMap.entrySet()){
-			String xiaoqu = bizStat.getKey();
-			double xiaoquAvg = bizStat.getValue().getAverage();
+		for(BizStat bizStat: avgList){
+			String xiaoqu = bizStat.getXiaoqu();
+			double xiaoquAvg = bizStat.getLatestAverage();
 			String cond = "{'dealstat':'{sellstat}', 'city':'{city}', 'community_name':'{xiaoqu}'}".
 					replace("{city}", city).replace("{sellstat}", sellstat).replace("{xiaoqu}", xiaoqu);
 			List<Object> fangyuanList = dao.find(cond, FangyuanHistEntity.class);
-			System.out.println(bizStat);
+			System.out.println("xiaoqustat: "+bizStat.toJson());
 			for(Object fangyuanOb: fangyuanList){
 				FangyuanHistEntity fangHist = (FangyuanHistEntity)fangyuanOb;
 				List<PriceEntity> houseUnitprice = fangHist.getUnitpriceList();
+				List<PriceEntity> housePrice = fangHist.getPriceList();
+				double price = housePrice.get(housePrice.size()-1).getPrice();
+				if(price > 5000000){
+					continue;
+				}
+				String district = fangHist.getDistrict();
+				if(null != district && (district.equals("顺义") || district.equals("大兴") || district.equals("房山") || district.equals("门头沟")
+						|| district.equals("通州") || district.equals("亦庄开发区") || district.equals("怀柔") || district.equals("延庆")
+						 || district.equals("密云"))){
+					continue;
+				}
 				double unitprice = houseUnitprice.get(houseUnitprice.size()-1).getPrice();
-				if(unitprice < xiaoquAvg){
-					System.out.println(fangHist);
+				if(unitprice <= xiaoquAvg){
+					System.out.println(fangHist.toJson());
 				}
 			}
+			System.out.println();
 		}
 		
 	}

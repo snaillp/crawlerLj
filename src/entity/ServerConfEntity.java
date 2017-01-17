@@ -89,6 +89,12 @@ public class ServerConfEntity extends CommonConfEntity{
 	public void setHousestatTableName(String housestatTableName) {
 		this.housestatTableName = housestatTableName;
 	}
+	public String getBizavgstatTableName() {
+		return bizavgstatTableName;
+	}
+	public void setBizavgstatTableName(String bizavgstatTableName) {
+		this.bizavgstatTableName = bizavgstatTableName;
+	}
 
 	private String mongoHost;
 	private int mongoPort;
@@ -96,6 +102,8 @@ public class ServerConfEntity extends CommonConfEntity{
 //TODO table name
 	private String fangyuanTableName;
 	private String housestatTableName;
+	private String bizavgstatTableName;
+	
 	private String imageDBName;
 	private String imageUrlPrefix;
 	private String redisHost;

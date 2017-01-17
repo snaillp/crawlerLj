@@ -84,10 +84,8 @@ public class DataapiCrawler {
 		}else if(runningType.equals("chengjiao")){
 			housestatList.add("chengjiao");
 		}
-		
 		for(String cityid: cityidList){
 			for(String housestat: housestatList){
-				
 				crawl(cityid, housestat);
 			}
 		}
@@ -128,6 +126,7 @@ public class DataapiCrawler {
 		String toRecordTimestamp = null;
 		boolean stopFlag = false;
 		Random random = new Random();
+		Map<String, String> xiaoquMap = getXiaoquMap(cityname);
 		if("chengjiao".equals(housestat)){
 			lastTimestamp = getTimestap(timestampfile);
 			logger.info("get timestamp "+lastTimestamp+" from "+timestampfile);
@@ -145,6 +144,17 @@ public class DataapiCrawler {
 				for(HouseEntity he: houseList){
 					FangyuanHistEntity fhe = new FangyuanHistEntity(he);
 					fhe.setCity(cityname);
+					String xiaoquId = he.getCommunity_id();
+					String xiaoquName = he.getCommunity_name();
+					if("ershoufang".equals(housestat)){
+						if(xiaoquId != null && xiaoquName != null && !xiaoquMap.containsKey(xiaoquId)){
+							xiaoquMap.put(xiaoquId, xiaoquName);
+						}
+					}else{
+						if(xiaoquName == null && xiaoquId !=null && xiaoquMap.containsKey(xiaoquId)){
+							fhe.setCommunity_name(xiaoquMap.get(xiaoquId));
+						}
+					}
 					if(null == he.getBizcircle_name()){
 						String bizcircle_id = he.getBizcircle_id();
 						if(this.localMap.containsKey(bizcircle_id)){
@@ -176,13 +186,13 @@ public class DataapiCrawler {
 					logger.info("has more data:"+hasMoreData+", or stopflag:"+stopFlag+", total update size:"+totalHouseNum);
 					break;
 				}
-				int sleepno = random.nextInt(100);
-				try {
-					Thread.sleep(sleepno);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				int sleepno = random.nextInt(100);
+//				try {
+//					Thread.sleep(sleepno);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 			if(null != toRecordTimestamp){
 				toRecordTimestamp = TimeUtil.addDay("yyyy-MM-dd", toRecordTimestamp, -5);
@@ -201,11 +211,53 @@ public class DataapiCrawler {
 			logger.info("write "+toRecordTimestamp+" to "+timestampfile);
 			setTimestap(timestampfile, toRecordTimestamp);
 		}
+		if("ershoufang".equals(housestat)){
+			writeXiaoquMap(xiaoquMap, cityname);
+		}
 		logger.info("crawl done");
+	}
+	public Map<String, String> getXiaoquMap(String city)
+	{
+		Map<String, String> xiaoquMap = new HashMap();
+		try {
+			BufferedReader br;
+			br = new BufferedReader(new InputStreamReader(new FileInputStream("xiaoqu."+city), "utf-8"));
+			String line;
+			while((line = br.readLine()) != null){
+				if(line.startsWith("#")){
+					continue;
+				}
+				String[] lineArray = line.trim().split("\t");
+				if(lineArray.length != 2){
+					continue;
+				}
+				xiaoquMap.put(lineArray[0], lineArray[1]);
+			}
+			br.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.info("get "+xiaoquMap+" xiaoqu map");
+		return xiaoquMap;
+	}
+	private void writeXiaoquMap(Map<String, String> xiaoquMap, String city)
+	{
+		try {
+			Writer writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream("xiaoqu."+city, false)));
+			for(Map.Entry<String, String> xiaoquEntity: xiaoquMap.entrySet()){
+				writer.write(xiaoquEntity.getKey()+"\t"+xiaoquEntity.getValue()+"\n");
+			}
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.info("write "+xiaoquMap.size()+" xiaoqu");
 	}
 	public String getTimestap(String timestampfile)
 	{
-		
 		try {
 			BufferedReader br;
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(timestampfile), "utf-8"));
