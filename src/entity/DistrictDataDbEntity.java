@@ -25,8 +25,11 @@ public class DistrictDataDbEntity extends CommonEntity{
 				dde.setName((String)dataMap.get("name"));
 				dde.setQuanpin_url((String)dataMap.get("quanpin_url"));
 				dde.setTransPrice(((Double)dataMap.get("transPrice")).intValue());
-				int quantity = (Integer)dataMap.get("quantity");
-				dde.setQuantity(quantity);
+				Object quan_str = dataMap.get("quantity");
+				if(quan_str != null) {
+					int quantity = ((Double)dataMap.get("quantity")).intValue();
+					dde.setQuantity(quantity);
+				}
 				dataList.add(dde);
 			}else{
 				break;

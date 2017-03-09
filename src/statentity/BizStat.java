@@ -120,14 +120,14 @@ public class BizStat extends CommonEntity implements Comparable<BizStat> {
 		Map<String, String> appendCondMap = new HashMap(1);
 		//通用key
 		appendCondMap.put("city", city);
-		if(districtId != null){
-			appendCondMap.put("districtId", districtId);
+		if(district != null){
+			appendCondMap.put("district", district);
 		}
-		if(bizId != null){
-			appendCondMap.put("bizId", bizId);
+		if(bizname != null){
+			appendCondMap.put("bizname", bizname);
 		}
-		if(xiaoquId != null){
-			appendCondMap.put("xiaoquId", xiaoquId);
+		if(xiaoqu != null){
+			appendCondMap.put("xiaoqu", xiaoqu);
 		}
 		//库里字段满足条件
 		return new Gson().toJson(appendCondMap);

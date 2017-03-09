@@ -43,9 +43,23 @@ public class FangyuanCut {
 		Map<FangyuanHistEntity, Double> unitratiocutMap = new HashMap();
 		for(Object fangyuanOb: fangyuanList){
 			FangyuanHistEntity fangHist = (FangyuanHistEntity)fangyuanOb;
+			String district = fangHist.getDistrict();
+			if(null != district && (district.equals("顺义") || district.equals("大兴") || district.equals("房山") || district.equals("门头沟")
+					|| district.equals("通州") || district.equals("亦庄开发区") || district.equals("怀柔") || district.equals("延庆")
+					 || district.equals("密云"))){
+				continue;
+			}
+			String districtId = fangHist.getDistrict_id();
+			if(null != districtId && districtId.equals("23008631")){
+				//燕郊
+				continue;
+			}
 			//price
 			List<PriceEntity> histPriceList = fangHist.getPriceList();
 			PriceEntity lastPrice = histPriceList.get(histPriceList.size()-1);
+			if(lastPrice.getPrice() > 5500000){
+				continue;
+			}
 			int pricediff = 0;
 			double cutratio = 0.0;
 			for(PriceEntity pe: histPriceList){

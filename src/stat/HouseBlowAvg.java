@@ -64,13 +64,18 @@ public class HouseBlowAvg {
 				List<PriceEntity> houseUnitprice = fangHist.getUnitpriceList();
 				List<PriceEntity> housePrice = fangHist.getPriceList();
 				double price = housePrice.get(housePrice.size()-1).getPrice();
-				if(price > 5000000){
+				if(price > 5500000){
 					continue;
 				}
 				String district = fangHist.getDistrict();
 				if(null != district && (district.equals("顺义") || district.equals("大兴") || district.equals("房山") || district.equals("门头沟")
 						|| district.equals("通州") || district.equals("亦庄开发区") || district.equals("怀柔") || district.equals("延庆")
 						 || district.equals("密云"))){
+					continue;
+				}
+				String districtId = fangHist.getDistrict_id();
+				if(null != districtId && districtId.equals("23008631")){
+					//燕郊
 					continue;
 				}
 				double unitprice = houseUnitprice.get(houseUnitprice.size()-1).getPrice();

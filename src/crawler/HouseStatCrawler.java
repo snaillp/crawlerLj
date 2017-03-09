@@ -42,8 +42,6 @@ private Logger logger = LogUtil.getLogger("housestatLog");
 		dao.init(serverConfEntity);
 		Pipeline pipeline = new MongoPipeLine(dao);
 		ResultItems resultItems = new ResultItems();
-//		resultItems.put("houseinfo", fhe);
-//		pipeline.process(resultItems, null);
 		//供需关系按天统计
 		String supplyDemandDayUrl = "http://bj.lianjia.com/fangjia/priceTrend/?analysis=1&duration=day";
 		//供需关系按月统计

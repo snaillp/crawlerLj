@@ -238,7 +238,7 @@ public class DataapiCrawler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		logger.info("get "+xiaoquMap+" xiaoqu map");
+		logger.info("get "+xiaoquMap.size()+" xiaoqu map");
 		return xiaoquMap;
 	}
 	private void writeXiaoquMap(Map<String, String> xiaoquMap, String city)

@@ -43,7 +43,7 @@ public class BizAvgVarStat {
 			if(level == 0){
 				mapkey = fangHist.getCommunity_name(); //小区名
 			}else if(level == 1){
-				mapkey = fangHist.getBizcircle_id(); //商圈id
+				mapkey = fangHist.getBizcircle_name(); //商圈id
 			}
 			List<PriceEntity> houseUnitprice = fangHist.getUnitpriceList();
 			if(bizStatMap.containsKey(mapkey)){
@@ -99,6 +99,7 @@ public class BizAvgVarStat {
 				var += diff*diff;
 			}
 			var /= unitpriceList.size();
+			var = Math.sqrt(var);
 			BizStatData bsd = new BizStatData();
 			String date = TimeUtil.getCurrentDate();
 			bsd.setDate(date);
@@ -108,6 +109,8 @@ public class BizAvgVarStat {
 			bsd.setVariance(var);
 			bsd.setHousenum(unitpriceList.size());
 			bstat.addDataList(bsd);
+			bstat.getLatestAverage();
+			bstat.getLatestHousenum();
 //			System.out.println(bstat.toJson());
 			ResultItems resultItems = new ResultItems();
 			resultItems.put("bizstatinfo", bstat);
