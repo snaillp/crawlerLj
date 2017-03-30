@@ -1,4 +1,4 @@
-package crawler;
+package stat;
 
 import java.io.IOException;
 import java.net.ConnectException;
